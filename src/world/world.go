@@ -3,7 +3,7 @@ package world
 /* Represents the world of the game - a square grid of cells. */
 type World struct {
 	// The number of cells in one row / column
-	WorldSize  uint64
+	Size  uint64
 
 	// Current generation of the world
 	Generation uint64
@@ -32,7 +32,7 @@ func Genesis(worldSize uint64) *World {
 
 	return &World{
 		Generation: 0,
-		WorldSize : worldSize,
+		Size      : worldSize,
 		Cells     : cells,
 		Rules     : *rules,
 	}
