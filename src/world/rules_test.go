@@ -35,14 +35,12 @@ func TestNewRules(t *testing.T) {
 		for i := range r.Live {
 			if r.Live[i] != out.Live[i] {
 				badContent = true
-				break
 			}
 		}
 
 		for i := range r.Die {
 			if r.Die[i] != out.Die[i] {
 				badContent = true
-				break
 			}
 		}
 
