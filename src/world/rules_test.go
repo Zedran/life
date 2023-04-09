@@ -14,9 +14,9 @@ func TestNewRules(t *testing.T) {
 
 	goodCases := map[string]Rules{
 		"23/3"  : {[]uint8{2, 3}, []uint8{3}}, // Typical rules
+		"233/33": {[]uint8{2, 3}, []uint8{3}}, // Duplicates
 		"23/"   : {[]uint8{2, 3}, []uint8{ }}, // No dead rules
 		"/3"    : {[]uint8{    }, []uint8{3}}, // No alive rules
-		"233/33": {[]uint8{2, 3}, []uint8{3}}, // Duplicates
 		"/"     : {[]uint8{    }, []uint8{ }}, // No rules
 	}
 
