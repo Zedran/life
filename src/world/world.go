@@ -9,7 +9,7 @@ const PADDING int = 1
 /* Represents the world of the game - a square grid of cells. */
 type World struct {
 	// The number of cells in one row / column
-	Size  uint64
+	Size       uint64
 
 	// Current generation of the world
 	Generation uint64
