@@ -5,5 +5,5 @@ type State uint8
 
 const (
 	DEAD  = State(iota)
-	AlIVE
+	ALIVE
 )
