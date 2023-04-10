@@ -1,8 +1,8 @@
 package world
 
 /* The size of the cell map border that is omitted during World.Update.
-   Skipping at least one row eliminates the risk of out of bounds access
-   to the array. There is no need to waste time checking for it.
+   Skipping at least one row and column eliminates the out of bounds
+   access to the array without the need to check for it.
 */
 const PADDING int = 1
 
