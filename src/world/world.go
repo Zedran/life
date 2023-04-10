@@ -1,8 +1,8 @@
 package world
 
 /* The size of the cell map border that is omitted during World.Update.
-   Skipping one row allows to avoid the need for ensuring that the
-   iteration over cell map always stays within the bounds of the array.
+   Skipping at least one row eliminates the risk of out of bounds access
+   to the array. There is no need to waste time checking for it.
 */
 const PADDING int = 1
 
@@ -39,11 +39,11 @@ func (w *World) Update() {
 		buffer = make([]State, len(w.Cells), len(w.Cells))
 	)
 
-	for i := pitch + 1; i <= int(w.Size) - pitch - 1; i += 3  {
+	for i := pitch + PADDING; i <= int(w.Size) - pitch - PADDING; i += PADDING * 2 + 1  {
 		
 			rowStart := i
 
-			for ; i < rowStart + pitch - 3; i++ {
+			for ; i < rowStart + pitch - PADDING * 2 - 1; i++ {
 				// Neighbour count
 				nc := 
 					w.Cells[i - 1 - pitch] + 
