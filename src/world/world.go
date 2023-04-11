@@ -35,25 +35,25 @@ func (w *World) Update() {
 	w.Generation++
 
 	var (
-		pitch  = int(w.Size)
+		rowLen = int(w.Size)
 		buffer = make([]State, len(w.Cells), len(w.Cells))
 	)
 
-	for i := pitch + PADDING; i <= int(w.Size) - pitch - PADDING; i += PADDING * 2 + 1  {
+	for i := rowLen + PADDING; i <= int(w.Size) - rowLen - PADDING; i += PADDING * 2 + 1  {
 		
 			rowStart := i
 
-			for ; i < rowStart + pitch - PADDING * 2 - 1; i++ {
+			for ; i < rowStart + rowLen - PADDING * 2 - 1; i++ {
 				// Neighbour count
 				nc := 
-					w.Cells[i - 1 - pitch] + 
-					w.Cells[i     - pitch] + 
-					w.Cells[i + 1 - pitch] + 
-					w.Cells[i - 1        ] + 
-					w.Cells[i + 1        ] + 
-					w.Cells[i - 1 + pitch] + 
-					w.Cells[i     + pitch] + 
-					w.Cells[i + 1 + pitch]
+					w.Cells[i - 1 - rowLen] + 
+					w.Cells[i     - rowLen] + 
+					w.Cells[i + 1 - rowLen] + 
+					w.Cells[i - 1         ] + 
+					w.Cells[i + 1         ] + 
+					w.Cells[i - 1 + rowLen] + 
+					w.Cells[i     + rowLen] + 
+					w.Cells[i + 1 + rowLen]
 
 				switch w.Cells[i] {
 				case ALIVE:
