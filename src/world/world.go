@@ -40,38 +40,38 @@ func (w *World) Update() {
 	)
 
 	for i := rowLen + PADDING; i < len(w.Cells) - rowLen - PADDING; i += PADDING * 2  {
-			
-			rowStart := i
-			
-			for ; i < rowStart + rowLen - PADDING * 2; i++ {
-				// Neighbour count
-				nc := 
-					w.Cells[i - 1 - rowLen] + 
-					w.Cells[i     - rowLen] + 
-					w.Cells[i + 1 - rowLen] + 
-					w.Cells[i - 1         ] + 
-					w.Cells[i + 1         ] + 
-					w.Cells[i - 1 + rowLen] + 
-					w.Cells[i     + rowLen] + 
-					w.Cells[i + 1 + rowLen]
+		
+		rowStart := i
 
-				switch w.Cells[i] {
-				case ALIVE:
-					for _, lr := range w.Rules.Live {
-						if State(lr) == nc {
-							buffer[i] = ALIVE
-							break
-						}
+		for ; i < rowStart + rowLen - PADDING * 2; i++ {
+			// Neighbour count
+			nc := 
+				w.Cells[i - 1 - rowLen] + 
+				w.Cells[i     - rowLen] + 
+				w.Cells[i + 1 - rowLen] + 
+				w.Cells[i - 1         ] + 
+				w.Cells[i + 1         ] + 
+				w.Cells[i - 1 + rowLen] + 
+				w.Cells[i     + rowLen] + 
+				w.Cells[i + 1 + rowLen]
+			
+			switch w.Cells[i] {
+			case ALIVE:
+				for _, lr := range w.Rules.Live {
+					if State(lr) == nc {
+						buffer[i] = ALIVE
+						break
 					}
-				case DEAD:
-					for _, dr := range w.Rules.Die {
-						if State(dr) == nc {
-							buffer[i] = ALIVE
-							break
-						}
+				}
+			case DEAD:
+				for _, dr := range w.Rules.Die {
+					if State(dr) == nc {
+						buffer[i] = ALIVE
+						break
 					}
 				}
 			}
+		}
 	}
 	w.Cells = buffer
 }
