@@ -39,11 +39,11 @@ func (w *World) Update() {
 		buffer = make([]State, len(w.Cells), len(w.Cells))
 	)
 
-	for i := rowLen + PADDING; i <= int(w.Size) - rowLen - PADDING; i += PADDING * 2 + 1  {
-		
+	for i := rowLen + PADDING; i < len(w.Cells) - rowLen - PADDING; i += PADDING * 2  {
+			
 			rowStart := i
-
-			for ; i < rowStart + rowLen - PADDING * 2 - 1; i++ {
+			
+			for ; i < rowStart + rowLen - PADDING * 2; i++ {
 				// Neighbour count
 				nc := 
 					w.Cells[i - 1 - rowLen] + 
@@ -66,7 +66,7 @@ func (w *World) Update() {
 				case DEAD:
 					for _, dr := range w.Rules.Die {
 						if State(dr) == nc {
-							buffer[i] = DEAD
+							buffer[i] = ALIVE
 							break
 						}
 					}
