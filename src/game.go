@@ -39,7 +39,7 @@ func NewGame() *Game {
 	ebiten.SetWindowSize(int(config.Window.W), int(config.Window.H))
 	ebiten.SetWindowTitle(config.Language.Title)
 
-	world := world.Genesis(uint64(config.WorldSize))	
+	world := world.Genesis(config.WorldSize)	
 
 	g := Game{
 		Config: config,

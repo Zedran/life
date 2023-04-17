@@ -9,7 +9,7 @@ const PADDING int = 1
 /* Represents the world of the game - a square grid of cells. */
 type World struct {
 	// The number of cells in one row / column
-	Size       uint64
+	Size       int
 
 	// Current generation of the world
 	Generation uint64
@@ -77,7 +77,7 @@ func (w *World) Update() {
 }
 
 /* Creates new world of specified size. */
-func Genesis(worldSize uint64) *World {
+func Genesis(worldSize int) *World {
 	cells := make([]State, worldSize * worldSize, worldSize * worldSize)
 
 	rules, _ := NewRules(DEFAULT_RULES)

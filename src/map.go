@@ -60,7 +60,7 @@ func (m *Map) CreateBackground() {
 		for x := float32(0); x < m.RowLength; x++ {
 			var color *color.RGBA
 
-			switch m.World.Cells[int(y + m.OffSetY) * int(m.World.Size) + int(x + m.OffSetX)] {
+			switch m.World.Cells[int(y + m.OffSetY) * m.World.Size + int(x + m.OffSetX)] {
 			case world.ALIVE:
 				color = m.Theme.CellAlive
 			case world.DEAD:
@@ -89,7 +89,7 @@ func (m *Map) Draw(screen *ebiten.Image) {
 	for y := float32(0); y < m.ColHeight; y++ {
 		for x := float32(0); x < m.RowLength; x++ {
 
-			if m.World.Cells[int(y + m.OffSetY) * int(m.World.Size) + int(x + m.OffSetX)] == world.ALIVE {
+			if m.World.Cells[int(y + m.OffSetY) * m.World.Size + int(x + m.OffSetX)] == world.ALIVE {
 				vector.DrawFilledRect(
 					screen, 
 					x * m.Zoom, 
