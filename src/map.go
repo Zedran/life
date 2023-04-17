@@ -11,8 +11,13 @@ import (
 )
 
 const (
+	// CellSize = Map.ZoomSteps[MapZoom] - BORDER_SIZE
+
 	// Initial zoom level
 	ZOOM_INIT   float32 =  8
+
+	// Maximum allowed zoom
+	ZOOM_MAX    float32 = 20
 
 	// Size of the border between cells in pixels
 	BORDER_SIZE float32 =  1
@@ -46,15 +51,33 @@ type Map struct {
 	// A pointer to the logical world of the game
 	World      *world.World
 
-	// Current zoom of the map. CellSize = Game.Zoom - BORDER_SIZE
-	Zoom       float32
+	// Current zoom of the map, expressed as index on Map.ZoomSteps slice.
+	Zoom       int
+	
+	// Valid zoom steps for a map of specified size
+	// CellSize = Map.ZoomSteps[MapZoom] - BORDER_SIZE
+	ZoomSteps  []float32
+}
+
+/* Adjusts zoom level, moving up or down the Map.ZoomSteps slice. zoom = cellSize + BORDER_SIZE */
+func (m *Map) AdjustZoomLevel(direction int) {
+	if m.Zoom + direction < 0 || m.Zoom + direction >= len(m.ZoomSteps) {
+		return
+	}
+
+	m.Zoom += direction
+
+	m.RowLength  = m.WindowW / m.ZoomSteps[m.Zoom]
+	m.ColHeight  = m.WindowH / m.ZoomSteps[m.Zoom]
+
+	m.CreateBackground()
 }
 
 /* Draws the empty cell map into Map.Background. */
 func (m *Map) CreateBackground() {
 	m.Background.Fill(m.Theme.Background)
 
-	cellSize := m.Zoom - BORDER_SIZE
+	cellSize := m.ZoomSteps[m.Zoom] - BORDER_SIZE
 
 	for y := float32(0); y < m.ColHeight; y++ {
 		for x := float32(0); x < m.RowLength; x++ {
@@ -69,8 +92,8 @@ func (m *Map) CreateBackground() {
 
 			vector.DrawFilledRect(
 				m.Background, 
-				x * m.Zoom, 
-				y * m.Zoom, 
+				x * m.ZoomSteps[m.Zoom], 
+				y * m.ZoomSteps[m.Zoom], 
 				cellSize, 
 				cellSize, 
 				color, 
@@ -84,7 +107,7 @@ func (m *Map) CreateBackground() {
 func (m *Map) Draw(screen *ebiten.Image) {
 	screen.DrawImage(m.Background, nil)
 
-	cellSize := m.Zoom - BORDER_SIZE
+	cellSize := m.ZoomSteps[m.Zoom] - BORDER_SIZE
 
 	for y := float32(0); y < m.ColHeight; y++ {
 		for x := float32(0); x < m.RowLength; x++ {
@@ -92,8 +115,8 @@ func (m *Map) Draw(screen *ebiten.Image) {
 			if m.World.Cells[int(y + m.OffSetY) * m.World.Size + int(x + m.OffSetX)] == world.ALIVE {
 				vector.DrawFilledRect(
 					screen, 
-					x * m.Zoom, 
-					y * m.Zoom, 
+					x * m.ZoomSteps[m.Zoom], 
+					y * m.ZoomSteps[m.Zoom], 
 					cellSize, 
 					cellSize, 
 					m.Theme.CellAlive, 
@@ -102,16 +125,6 @@ func (m *Map) Draw(screen *ebiten.Image) {
 			}
 		}
 	}
-}
-
-/* Sets zoom level in pixels. zoom = cellSize + BORDER_SIZE */
-func (m *Map) SetZoomLevel(zoom float32) {
-	m.Zoom = zoom
-
-	m.RowLength  = m.WindowW / m.Zoom
-	m.ColHeight  = m.WindowH / m.Zoom
-
-	m.CreateBackground()
 }
 
 /* Creates new graphical map of the world. */
@@ -129,7 +142,9 @@ func NewMap(windowWidth, windowHeight float32, theme *config.Theme, world *world
 
 	m.Background = ebiten.NewImage(int(windowWidth), int(windowHeight))
 
-	m.SetZoomLevel(ZOOM_INIT)
+	m.ZoomSteps  = GetCommonDivisors(config.ZOOM_MIN, ZOOM_MAX, windowWidth, windowHeight)
+
+	m.AdjustZoomLevel(Index(m.ZoomSteps, ZOOM_INIT))
 
 	return &m
 }

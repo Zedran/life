@@ -27,7 +27,16 @@ func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeigh
 	return int(g.Config.Window.W), int(g.Config.Window.H)
 }
 
+/* Updates the game every tick. */
 func (g *Game) Update() error {
+	_, dy := ebiten.Wheel()
+
+	if dy > 0 {
+		g.Map.AdjustZoomLevel(1)
+	} else if dy < 0 {
+		g.Map.AdjustZoomLevel(-1)
+	}
+
 	g.World.Update()
 	return nil
 }
