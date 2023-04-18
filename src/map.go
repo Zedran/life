@@ -1,8 +1,6 @@
 package main
 
 import (
-	"image/color"
-
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/vector"
 
@@ -81,22 +79,13 @@ func (m *Map) CreateBackground() {
 
 	for y := float32(0); y < m.ColHeight; y++ {
 		for x := float32(0); x < m.RowLength; x++ {
-			var color *color.RGBA
-
-			switch m.World.Cells[int(y + m.OffSetY) * m.World.Size + int(x + m.OffSetX)] {
-			case world.ALIVE:
-				color = m.Theme.CellAlive
-			case world.DEAD:
-				color = m.Theme.CellDead
-			}
-
 			vector.DrawFilledRect(
 				m.Background, 
 				x * m.ZoomSteps[m.Zoom], 
 				y * m.ZoomSteps[m.Zoom], 
 				cellSize, 
 				cellSize, 
-				color, 
+				m.Theme.CellDead, 
 				false,
 			)
 		}
