@@ -57,16 +57,52 @@ type Map struct {
 	ZoomSteps  []float32
 }
 
-/* Adjusts zoom level, moving up or down the Map.ZoomSteps slice. zoom = cellSize + BORDER_SIZE */
+/* Adjusts zoom level, moving up or down the Map.ZoomSteps slice. zoom = cellSize + BORDER_SIZE.
+   Direction equal to 0 indicates that this function was called by Map constructor.
+*/
 func (m *Map) AdjustZoomLevel(direction int) {
+	if direction == 0 {
+		m.Zoom = Index(m.ZoomSteps, ZOOM_INIT)
+
+		m.RowLength  = m.WindowW / m.ZoomSteps[m.Zoom]
+		m.ColHeight  = m.WindowH / m.ZoomSteps[m.Zoom]
+		m.CreateBackground()
+		return
+	}
+
 	if m.Zoom + direction < 0 || m.Zoom + direction >= len(m.ZoomSteps) {
 		return
 	}
+
+	cursorX, cursorY := ebiten.CursorPosition()
+	oldX, oldY       := m.GetCellAtPoint(cursorX, cursorY)
 
 	m.Zoom += direction
 
 	m.RowLength  = m.WindowW / m.ZoomSteps[m.Zoom]
 	m.ColHeight  = m.WindowH / m.ZoomSteps[m.Zoom]
+
+	cursorX, cursorY = ebiten.CursorPosition()
+	newX, newY       := m.GetCellAtPoint(cursorX, cursorY)
+
+	dX := -float32(newX - oldX)
+	dY := -float32(newY - oldY)
+
+	if m.OffSetX + dX < 0 {
+		m.OffSetX = 0
+	} else if m.OffSetX + dX > float32(m.World.Size) - m.RowLength {
+		m.OffSetX = float32(m.World.Size) - m.RowLength
+	} else {
+		m.OffSetX += dX
+	}
+
+	if m.OffSetY + dY < 0 {
+		m.OffSetY = 0
+	} else if m.OffSetY + dY > float32(m.World.Size) - m.RowLength {
+		m.OffSetY = float32(m.World.Size) - m.RowLength
+	} else {
+		m.OffSetY += dY
+	}
 
 	m.CreateBackground()
 }
@@ -116,6 +152,13 @@ func (m *Map) Draw(screen *ebiten.Image) {
 	}
 }
 
+/* Accepts a screen position in pixels and returns coordinates (x, y) of a cell at this position. */
+func (m *Map) GetCellAtPoint(pX, pY int) (x, y int) {
+	x = int(float32(pX) * m.RowLength / m.WindowW)
+	y = int(float32(pY) * m.ColHeight / m.WindowH)
+	return 
+}
+
 /* Creates new graphical map of the world. */
 func NewMap(windowWidth, windowHeight float32, theme *config.Theme, world *world.World) *Map {
 	var m Map
@@ -133,7 +176,7 @@ func NewMap(windowWidth, windowHeight float32, theme *config.Theme, world *world
 
 	m.ZoomSteps  = GetCommonDivisors(config.ZOOM_MIN, ZOOM_MAX, windowWidth, windowHeight)
 
-	m.AdjustZoomLevel(Index(m.ZoomSteps, ZOOM_INIT))
+	m.AdjustZoomLevel(0)
 
 	return &m
 }
