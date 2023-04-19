@@ -163,8 +163,8 @@ func (m *Map) Move(dX, dY float32) {
 
 	if m.OffSetY + dY < 0 {
 		m.OffSetY = 0
-	} else if m.OffSetY + dY > float32(m.World.Size) - m.RowLength {
-		m.OffSetY = float32(m.World.Size) - m.RowLength
+	} else if m.OffSetY + dY > float32(m.World.Size) - m.ColHeight {
+		m.OffSetY = float32(m.World.Size) - m.ColHeight
 	} else {
 		m.OffSetY += dY
 	}
