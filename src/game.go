@@ -11,15 +11,15 @@ import (
 /* Represents the general structure of the game. */
 type Game struct {
 	// Game config
-	Config *config.Config
+	Config    *config.Config
 
 	// Drag event handles panning of the Game.Map
 	DragEvent *DragEvent
 
-	Map    *Map
+	Map       *Map
 
 	// Game logic
-	World  *world.World
+	World     *world.World
 }
 
 /* Draws interface elements onto the screen. */
@@ -79,10 +79,10 @@ func NewGame() *Game {
 	world := world.Genesis(config.WorldSize)	
 
 	g := Game{
-		Config: config,
+		Config   : config,
 		DragEvent: nil,
-		Map   : NewMap(config.Window.W, config.Window.H, config.Theme, world),
-		World : world,
+		Map      : NewMap(config.Window.W, config.Window.H, config.Theme, world),
+		World    : world,
 	}
 
 	return &g
