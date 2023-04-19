@@ -93,6 +93,12 @@ func (m *Map) AdjustZoomLevel(direction int) {
 	m.CreateBackground()
 }
 
+/* Moves the view to the center of the map. */
+func (m *Map) CenterView() {
+	m.OffSetX = (float32(m.World.Size) - m.RowLength) / 2
+	m.OffSetY = (float32(m.World.Size) - m.ColHeight) / 2
+}
+
 /* Draws the empty cell map into Map.Background. */
 func (m *Map) CreateBackground() {
 	m.Background.Fill(m.Theme.Background)
@@ -187,6 +193,7 @@ func NewMap(windowWidth, windowHeight float32, theme *config.Theme, world *world
 	m.ZoomSteps  = GetCommonDivisors(config.ZOOM_MIN, ZOOM_MAX, windowWidth, windowHeight)
 
 	m.AdjustZoomLevel(0)
+	m.CenterView()
 
 	return &m
 }
