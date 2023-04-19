@@ -88,21 +88,7 @@ func (m *Map) AdjustZoomLevel(direction int) {
 	dX := -float32(newX - oldX)
 	dY := -float32(newY - oldY)
 
-	if m.OffSetX + dX < 0 {
-		m.OffSetX = 0
-	} else if m.OffSetX + dX > float32(m.World.Size) - m.RowLength {
-		m.OffSetX = float32(m.World.Size) - m.RowLength
-	} else {
-		m.OffSetX += dX
-	}
-
-	if m.OffSetY + dY < 0 {
-		m.OffSetY = 0
-	} else if m.OffSetY + dY > float32(m.World.Size) - m.RowLength {
-		m.OffSetY = float32(m.World.Size) - m.RowLength
-	} else {
-		m.OffSetY += dY
-	}
+	m.Move(dX, dY)
 
 	m.CreateBackground()
 }
@@ -157,6 +143,32 @@ func (m *Map) GetCellAtPoint(pX, pY int) (x, y int) {
 	x = int(float32(pX) * m.RowLength / m.WindowW)
 	y = int(float32(pY) * m.ColHeight / m.WindowH)
 	return 
+}
+
+/* Offsets the map by specified number of cells. Does nothing for values that exceed the world bounds. */
+func (m *Map) Move(dX, dY float32) {
+	if m.OffSetX + dX < 0 {
+		m.OffSetX = 0
+	} else if m.OffSetX + dX > float32(m.World.Size) - m.RowLength {
+		m.OffSetX = float32(m.World.Size) - m.RowLength
+	} else {
+		m.OffSetX += dX
+	}
+
+	if m.OffSetY + dY < 0 {
+		m.OffSetY = 0
+	} else if m.OffSetY + dY > float32(m.World.Size) - m.RowLength {
+		m.OffSetY = float32(m.World.Size) - m.RowLength
+	} else {
+		m.OffSetY += dY
+	}
+}
+
+/* Calls the Map.Move method after translating the movement from graphical measurements into world dimensions. */
+func (m *Map) Pan(dX, dY int) {
+	cellSize := m.ZoomSteps[m.Zoom] - BORDER_SIZE
+
+	m.Move(float32(dX) / cellSize, float32(dY) / cellSize)
 }
 
 /* Creates new graphical map of the world. */
