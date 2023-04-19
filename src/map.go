@@ -166,9 +166,7 @@ func (m *Map) Move(dX, dY float32) {
 
 /* Calls the Map.Move method after translating the movement from graphical measurements into world dimensions. */
 func (m *Map) Pan(dX, dY int) {
-	cellSize := m.ZoomSteps[m.Zoom] - BORDER_SIZE
-
-	m.Move(float32(dX) / cellSize, float32(dY) / cellSize)
+	m.Move(float32(dX) / m.ZoomSteps[m.Zoom], float32(dY) / m.ZoomSteps[m.Zoom])
 }
 
 /* Creates new graphical map of the world. */
