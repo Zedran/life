@@ -7,7 +7,7 @@ func GetCommonDivisors(min, max float32, nums ...float32) []float32 {
 	divs := make([]float32, 0)
 
 	Outer:
-		for d := min; d <= max; d += 2 {
+		for d := min; d <= max; d++ {
 			
 			for _, n := range nums {
 				if math.Mod(float64(n), float64(d)) != 0 {
