@@ -9,8 +9,6 @@ import (
 )
 
 const (
-	// CellSize = Map.ZoomSteps[MapZoom] - BORDER_SIZE
-
 	// Initial zoom level
 	ZOOM_INIT   float32 =  8
 
