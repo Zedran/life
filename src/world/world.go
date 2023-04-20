@@ -2,7 +2,8 @@ package world
 
 import "sync"
 
-/* Size of the cell map border that is not checked during World.Update.
+/*
+   Size of the cell map border that is not checked during World.Update.
    Skipping at least one row and column prevents the out of bounds
    access to the slice, so there is no need to check for it.
 */

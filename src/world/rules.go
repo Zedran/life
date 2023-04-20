@@ -12,7 +12,8 @@ const DEFAULT_RULES = "23/3"
 // Error returned if specified rules do not have correct format
 var errInvalidRules = errors.New("invalid rules")
 
-/* Rules of the game. They specify a number of neighbours required 
+/*
+   Rules of the game. They specify a number of neighbours required 
    for the cell to live or die on transition to next generation.
 */
 type Rules struct {
@@ -23,7 +24,8 @@ type Rules struct {
 	Die  []uint8
 }
 
-/* Creates new Rules struct. Error returned means that specified string
+/*
+   Creates new Rules struct. Error returned means that specified string
    is not formatted correctly, i.e. <live>/<die>. '/' must always be present.
 */
 func NewRules(ruleString string) (*Rules, error) {
@@ -51,7 +53,8 @@ func NewRules(ruleString string) (*Rules, error) {
 	return &r, nil
 }
 
-/* Makes an in depth validation of rules substring (either 'live' or 'die' part)
+/*
+   Makes an in depth validation of rules substring (either 'live' or 'die' part)
    and returns a slice with number of neighbours required to trigger the event.
 */
 func parseRuleSubstring(sub string) ([]uint8, error) {

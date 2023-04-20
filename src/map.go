@@ -57,7 +57,8 @@ type Map struct {
 	ZoomSteps  []float32
 }
 
-/* Adjusts zoom level, moving up or down the Map.ZoomSteps slice. zoom = cellSize + BORDER_SIZE.
+/*
+   Adjusts zoom level, moving up or down the Map.ZoomSteps slice. zoom = cellSize + BORDER_SIZE.
    Direction equal to 0 indicates that this function was called by Map constructor.
 */
 func (m *Map) AdjustZoomLevel(direction int) {
