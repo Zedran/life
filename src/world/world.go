@@ -1,5 +1,7 @@
 package world
 
+import "sync"
+
 /* The size of the cell map border that is omitted during World.Update.
    Skipping at least one row and column eliminates the out of bounds
    access to the array without the need to check for it.
@@ -39,40 +41,47 @@ func (w *World) Update() {
 		buffer = make([]State, len(w.Cells), len(w.Cells))
 	)
 
-	for i := rowLen + PADDING; i < len(w.Cells) - rowLen - PADDING; i += PADDING * 2  {
-		
-		rowStart := i
+	var wg sync.WaitGroup
 
-		for ; i < rowStart + rowLen - PADDING * 2; i++ {
-			// Neighbour count
-			nc := 
-				w.Cells[i - 1 - rowLen] + 
-				w.Cells[i     - rowLen] + 
-				w.Cells[i + 1 - rowLen] + 
-				w.Cells[i - 1         ] + 
-				w.Cells[i + 1         ] + 
-				w.Cells[i - 1 + rowLen] + 
-				w.Cells[i     + rowLen] + 
-				w.Cells[i + 1 + rowLen]
-			
-			switch w.Cells[i] {
-			case ALIVE:
-				for _, lr := range w.Rules.Live {
-					if State(lr) == nc {
-						buffer[i] = ALIVE
-						break
+	wg.Add(w.Size - PADDING * 2)
+
+	for y := rowLen * PADDING; y < len(w.Cells) - rowLen * PADDING; y += rowLen  {
+		
+		go func(rowStart int) {
+
+			for i := rowStart + PADDING; i < rowStart + rowLen - PADDING; i++ {
+				// Neighbour count
+				nc := 
+					w.Cells[i - 1 - rowLen] + 
+					w.Cells[i     - rowLen] + 
+					w.Cells[i + 1 - rowLen] + 
+					w.Cells[i - 1         ] + 
+					w.Cells[i + 1         ] + 
+					w.Cells[i - 1 + rowLen] + 
+					w.Cells[i     + rowLen] + 
+					w.Cells[i + 1 + rowLen]
+
+				switch w.Cells[i] {
+				case ALIVE:
+					for _, lr := range w.Rules.Live {
+						if State(lr) == nc {
+							buffer[i] = ALIVE
+							break
+						}
 					}
-				}
-			case DEAD:
-				for _, dr := range w.Rules.Die {
-					if State(dr) == nc {
-						buffer[i] = ALIVE
-						break
+				case DEAD:
+					for _, dr := range w.Rules.Die {
+						if State(dr) == nc {
+							buffer[i] = ALIVE
+							break
+						}
 					}
 				}
 			}
-		}
+			wg.Done()
+		}(y)
 	}
+	wg.Wait()
 	w.Cells = buffer
 }
 
