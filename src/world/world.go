@@ -2,9 +2,9 @@ package world
 
 import "sync"
 
-/* The size of the cell map border that is omitted during World.Update.
-   Skipping at least one row and column eliminates the out of bounds
-   access to the array without the need to check for it.
+/* Size of the cell map border that is not checked during World.Update.
+   Skipping at least one row and column prevents the out of bounds
+   access to the slice, so there is no need to check for it.
 */
 const PADDING int = 1
 
