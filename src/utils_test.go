@@ -2,6 +2,44 @@ package main
 
 import "testing"
 
+/* Tests whether the number closest to mean is properly picked. */
+func TestGetClosestToMean(t *testing.T) {
+	type testCase struct {
+		input    []float32
+		expected   float32
+	}
+
+	cases := []testCase{
+		{
+			input:    []float32{5, 4, 3, 7},
+			expected: 5,
+		},
+		{
+			input:    []float32{1, 2, 3, 4, 5, 6, 10, 12, 15, 20, 30, 60},
+			expected: 15,
+		},
+		{
+			input:    []float32{},
+			expected: 0,
+		},
+		{
+			input:    []float32{42},
+			expected: 42,
+		},
+		{
+			input:    []float32{2, -17, 5, 3, 5},
+			expected: 2,
+		},
+	}
+
+	for _, c := range cases {
+		out := GetClosestToMean(c.input)
+		if out != c.expected {
+			t.Fatalf("Failed for %v: got %v expected %v\n", c.input, out, c.expected)
+		}
+	}
+}
+
 /* Tests whether GetCommonDivisors returns appropriate common factors. */
 func TestGetCommonDivisors(t *testing.T) {
 	type testCase struct {

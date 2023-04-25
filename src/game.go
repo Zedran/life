@@ -16,6 +16,9 @@ type Game struct {
 	// Drag event handles panning of the Game.Map
 	DragEvent *DragEvent
 
+	// Generations clock manages the speed of transition through generations
+	GenClock  *Clock
+
 	Map       *Map
 
 	// Game logic
@@ -49,7 +52,10 @@ func (g *Game) Update() error {
 		g.Map.AdjustZoomLevel(-1)
 	}
 
-	g.World.Update()
+	if g.GenClock.Tick() == TRIGGER {
+		g.World.Update()
+	}
+
 	return nil
 }
 
@@ -81,6 +87,7 @@ func NewGame() *Game {
 	g := Game{
 		Config   : config,
 		DragEvent: nil,
+		GenClock : NewClock(),
 		Map      : NewMap(config.Window.W, config.Window.H, config.Theme, world),
 		World    : world,
 	}
