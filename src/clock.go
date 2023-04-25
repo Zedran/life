@@ -1,8 +1,6 @@
 package main
 
-import (
-	"github.com/hajimehoshi/ebiten/v2"
-)
+import "github.com/hajimehoshi/ebiten/v2"
 
 /* Clock limits the event occurence rate to the specified number per second. */
 type Clock struct {
