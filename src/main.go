@@ -1,11 +1,17 @@
 package main
 
 import (
-	"fmt"
+	"log"
 
-	"github.com/Zedran/life/src/world"
+	"github.com/hajimehoshi/ebiten/v2"
 )
 
 func main() {
-	fmt.Println(world.Genesis(200))
+	g := NewGame()
+
+	g.World.RandomState(5)
+
+	if err := ebiten.RunGame(g); err != nil {
+		log.Fatal(err)
+	}
 }
