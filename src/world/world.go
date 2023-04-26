@@ -1,6 +1,9 @@
 package world
 
-import "sync"
+import (
+	"math/rand"
+	"sync"
+)
 
 /*
    Size of the cell map border that is not checked during World.Update.
@@ -22,6 +25,27 @@ type World struct {
 
 	// Game rules currently in effect
 	Rules      Rules
+}
+
+/*
+	Randomly fills the world with life. 
+	The accepted values of density parameter fall in range <1; 9>. 
+	The lower the density, the more scarce life becomes.
+*/
+func (w *World) RandomState(density int) {
+	const DENSITY_MAX int = 10
+
+	if density < 1 {
+		density = 1
+	} else if density >= DENSITY_MAX {
+		density = DENSITY_MAX - 1
+	}
+
+	for i := range w.Cells {
+		if rand.Intn(DENSITY_MAX - density) == 0 {
+			w.Cells[i] = State(rand.Intn(2))
+		}
+	}
 }
 
 /* Reset the world by clearing the cell states and setting the generation number to zero. */
