@@ -64,9 +64,9 @@ func (w *World) Update() {
 	var (
 		rowLen = int(w.Size)
 		buffer = make([]State, len(w.Cells), len(w.Cells))
-	)
 
-	var wg sync.WaitGroup
+		wg sync.WaitGroup
+	)
 
 	wg.Add(w.Size - PADDING * 2)
 
