@@ -35,6 +35,8 @@ func NewRules(ruleString string) (*Rules, error) {
 		return nil, errInvalidRules
 	}
 
+	ruleString = strings.Replace(ruleString, " ", "", -1)
+
 	vals := strings.Split(ruleString, ruleSep)
 
 	var (

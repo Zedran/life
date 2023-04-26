@@ -18,6 +18,7 @@ func TestNewRules(t *testing.T) {
 		"23/"   : {[]uint8{2, 3}, []uint8{ }}, // No dead rules
 		"/3"    : {[]uint8{    }, []uint8{3}}, // No alive rules
 		"/"     : {[]uint8{    }, []uint8{ }}, // No rules
+		" 1 / 1": {[]uint8{1   }, []uint8{1}}, // Spaces
 	}
 
 	for gc, out := range goodCases {
