@@ -24,7 +24,7 @@ type World struct {
 	Cells      []State
 
 	// Game rules currently in effect
-	Rules      Rules
+	Rules      *Rules
 }
 
 /*
@@ -120,6 +120,6 @@ func Genesis(worldSize int) *World {
 		Generation: 0,
 		Size      : worldSize,
 		Cells     : cells,
-		Rules     : *rules,
+		Rules     : rules,
 	}
 }
