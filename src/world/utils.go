@@ -31,7 +31,7 @@ func sha256sum(s string) []byte {
 
 /* 
 	Seeds the PRNG with specified string. Numerical seeds are treated like integers. 
-	For seeds that do not contain digits only, seedFromString is called.
+	For seeds containing other characters, seedFromString is called.
 */
 func Seed(seed string) {
 	n, err := strconv.ParseInt(seed, 10, 64)
