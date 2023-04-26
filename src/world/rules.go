@@ -29,15 +29,15 @@ type Rules struct {
    is not formatted correctly, i.e. <live>/<die>. '/' must always be present.
 */
 func NewRules(ruleString string) (*Rules, error) {
-	ruleSep := "/"
+	const RULE_SEP string = "/"
 
-	if strings.Count(ruleString, ruleSep) != 1 {
+	if strings.Count(ruleString, RULE_SEP) != 1 {
 		return nil, errInvalidRules
 	}
 
 	ruleString = strings.Replace(ruleString, " ", "", -1)
 
-	vals := strings.Split(ruleString, ruleSep)
+	vals := strings.Split(ruleString, RULE_SEP)
 
 	var (
 		err error
