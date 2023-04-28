@@ -25,6 +25,9 @@ type World struct {
 
 	// Game rules currently in effect
 	Rules      *Rules
+
+	// WaitGroup for World.Update method
+	wg         *sync.WaitGroup
 }
 
 /*
@@ -64,11 +67,9 @@ func (w *World) Update() {
 	var (
 		rowLen = int(w.Size)
 		buffer = make([]State, len(w.Cells), len(w.Cells))
-
-		wg sync.WaitGroup
 	)
 
-	wg.Add(w.Size - PADDING * 2)
+	w.wg.Add(w.Size - PADDING * 2)
 
 	for y := rowLen * PADDING; y < len(w.Cells) - rowLen * PADDING; y += rowLen  {
 		
@@ -103,10 +104,10 @@ func (w *World) Update() {
 					}
 				}
 			}
-			wg.Done()
+			w.wg.Done()
 		}(y)
 	}
-	wg.Wait()
+	w.wg.Wait()
 	w.Cells = buffer
 }
 
@@ -121,5 +122,6 @@ func Genesis(worldSize int) *World {
 		Size      : worldSize,
 		Cells     : cells,
 		Rules     : rules,
+		wg        : &sync.WaitGroup{},
 	}
 }
