@@ -14,13 +14,16 @@ const PADDING int = 1
 
 /* Represents the world of the game - a square grid of cells. */
 type World struct {
+	// BufferPool for the State array
+	bp         *BufferPool
+
 	// The number of cells in one row / column
 	Size       int
 
 	// Current generation of the world
 	Generation uint64
 
-	// State of the cells
+	// State of the cells, points to bp.CurState
 	Cells      []State
 
 	// Game rules currently in effect
@@ -66,10 +69,12 @@ func (w *World) Update() {
 
 	var (
 		rowLen = int(w.Size)
-		buffer = make([]State, len(w.Cells), len(w.Cells))
+		buffer = w.bp.GetCurrentBuffer()
 	)
 
-	w.wg.Add(w.Size - PADDING * 2)
+	w.wg.Add(1 + w.Size - PADDING * 2)
+
+	go w.bp.ClearSpareBuffer(w.wg)
 
 	for y := rowLen * PADDING; y < len(w.Cells) - rowLen * PADDING; y += rowLen  {
 		
@@ -108,7 +113,10 @@ func (w *World) Update() {
 		}(y)
 	}
 	w.wg.Wait()
-	w.Cells = buffer
+
+	w.bp.NextState()
+
+	w.Cells = w.bp.GetCurrentState()
 }
 
 /* Creates new world of specified size. */
@@ -118,6 +126,7 @@ func Genesis(worldSize int) *World {
 	rules, _ := NewRules(DEFAULT_RULES)
 
 	return &World{
+		bp        : NewBufferPool(len(cells)),
 		Generation: 0,
 		Size      : worldSize,
 		Cells     : cells,

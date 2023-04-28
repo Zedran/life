@@ -22,6 +22,11 @@ func maxInt64() int64 {
 	return int64(^uint64(0) >> 1)
 }
 
+/* Returns new State buffer of specified size. */
+func newStateBuffer(size int) []State {
+	return make([]State, size, size)
+}
+
 /* Returns sha256sum of s. */
 func sha256sum(s string) []byte {
 	hash := sha256.New()
