@@ -23,7 +23,7 @@ type World struct {
 	// Current generation of the world
 	Generation uint64
 
-	// State of the cells, points to bp.CurState
+	// State of the cells, points to World.bp.state
 	Cells      []State
 
 	// Game rules currently in effect
