@@ -119,6 +119,13 @@ func (w *World) Update() {
 	w.Cells = w.bp.GetCurrentState()
 }
 
+/* Progress the World by n generations. */
+func (w *World) UpdateBy(n int) {
+	for i := 0; i < n; i++ {
+		w.Update()
+	}
+}
+
 /* Creates new world of specified size. */
 func Genesis(worldSize int) *World {
 	cells := make([]State, worldSize * worldSize, worldSize * worldSize)

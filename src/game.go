@@ -1,10 +1,13 @@
 package main
 
 import (
+	"log"
+
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/inpututil"
 
 	"github.com/Zedran/life/src/config"
+	"github.com/Zedran/life/src/ui"
 	"github.com/Zedran/life/src/world"
 )
 
@@ -21,13 +24,56 @@ type Game struct {
 
 	Map       *Map
 
+	// A pointer to user interface of the game
+	UI        *ui.UI
+
 	// Game logic
 	World     *world.World
+
+	// Indicates whether the game is currently running
+	State     GameState
 }
 
-/* Draws interface elements onto the screen. */
+/* Draws the map and interface elements onto the screen. */
 func (g *Game) Draw(screen *ebiten.Image) {
 	g.Map.Draw(screen)
+	g.UI.Draw(screen)
+}
+
+/* Handles the input from g.UI. */
+func (g *Game) HandleControllerInput(uiResp *ui.UIResponse) {
+	if uiResp == nil {
+		return
+	}
+
+	switch uiResp.Signal {
+	case ui.PLAY_TOGGLE:
+		if g.State == RUN {
+			g.State = PAUSE
+		} else if g.State == PAUSE {
+			g.State = RUN
+		}
+	case ui.SLOW_DOWN:
+		g.GenClock.AdjustSpeed(-1)
+	case ui.SPEED_UP:
+		g.GenClock.AdjustSpeed(1)
+	case ui.RESET_STATE:
+		g.World.Reset()
+	case ui.RANDOM_STATE:
+		g.World.RandomState(5)
+	case ui.FF_I:
+		g.World.Update()
+	case ui.FF_X:
+		g.World.UpdateBy(10)
+	case ui.FF_L:
+		g.World.UpdateBy(50)
+	case ui.FF_C:
+		g.World.UpdateBy(100)
+	case ui.FF_M:
+		g.World.UpdateBy(1000)
+	case ui.NEW_RULES:
+		g.World.Rules, _ = world.NewRules(uiResp.Rules)
+	}
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
@@ -52,7 +98,9 @@ func (g *Game) Update() error {
 		g.Map.AdjustZoomLevel(-1)
 	}
 
-	if g.GenClock.Tick() == TRIGGER {
+	g.HandleControllerInput(g.UI.Update())
+
+	if g.State == RUN && g.GenClock.Tick() == TRIGGER {
 		g.World.Update()
 	}
 
@@ -82,14 +130,21 @@ func NewGame() *Game {
 	ebiten.SetWindowSize(int(config.Window.W), int(config.Window.H))
 	ebiten.SetWindowTitle(config.Language.Title)
 
-	world := world.Genesis(config.WorldSize)	
+	w := world.Genesis(config.WorldSize)
+	
+	ui, err := ui.NewUI(world.DEFAULT_RULES)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	g := Game{
 		Config   : config,
 		DragEvent: nil,
 		GenClock : NewClock(),
-		Map      : NewMap(config.Window.W, config.Window.H, config.Theme, world),
-		World    : world,
+		Map      : NewMap(config.Window.W, config.Window.H, config.Theme, w),
+		UI       : ui,
+		World    : w,
+		State    : PAUSE,
 	}
 
 	return &g
