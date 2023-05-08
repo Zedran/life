@@ -47,6 +47,8 @@ func (w *World) RandomState(density int) {
 		density = DENSITY_MAX - 1
 	}
 
+	w.Reset()
+
 	for i := range w.Cells {
 		if rand.Intn(DENSITY_MAX - density) == 0 {
 			w.Cells[i] = State(rand.Intn(2))
