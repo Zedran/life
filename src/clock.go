@@ -26,6 +26,7 @@ func (c *Clock) AdjustSpeed(direction int) {
 	}
 
 	c.CurrentSpeed += direction
+	c.Ticks = 0
 }
 
 /* Returns the current speed expressed as events per second. */
