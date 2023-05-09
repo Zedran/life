@@ -30,11 +30,6 @@ func NewButton(font *font.Face, text string, c *Controller, s UISignal) *widget.
 			},
 		),
 
-		widget.ButtonOpts.ClickedHandler(
-			func(clickedArgs *widget.ButtonClickedEventArgs) {
-				c.SetSignal(s)
-			},
-		),
 		widget.ButtonOpts.WidgetOpts(
 			widget.WidgetOpts.LayoutData(
 				widget.GridLayoutData{
@@ -42,6 +37,29 @@ func NewButton(font *font.Face, text string, c *Controller, s UISignal) *widget.
 					VerticalPosition: widget.GridLayoutPositionStart,
 				},
 			),
+		),
+	)
+
+	button.Configure(
+		widget.ButtonOpts.PressedHandler(
+			func(pressedArgs *widget.ButtonPressedEventArgs) {
+				b := pressedArgs.Button.GetWidget()
+
+				if button.GetWidget() == b {
+					c.SetLMBDownOn(b)
+				}
+			},
+		),
+
+		widget.ButtonOpts.ReleasedHandler(
+			func(releasedArgs *widget.ButtonReleasedEventArgs) {
+				b := releasedArgs.Button.GetWidget()
+
+				if releasedArgs.Inside && c.IsLMBDownOn(b) {
+					c.SetSignal(s)
+					c.ClearLMBPointer()
+				}
+			},
 		),
 	)
 
