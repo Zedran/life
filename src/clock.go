@@ -25,8 +25,11 @@ func (c *Clock) AdjustSpeed(direction int) {
 		return
 	}
 
+	partWaitedThrough := float32(c.Ticks) / float32(c.SpeedDial[c.CurrentSpeed])
+
 	c.CurrentSpeed += direction
-	c.Ticks = 0
+
+	c.Ticks = int(float32(c.SpeedDial[c.CurrentSpeed]) * partWaitedThrough)
 }
 
 /* Returns the current speed expressed as events per second. */
