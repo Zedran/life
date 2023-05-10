@@ -7,7 +7,7 @@ import (
 	"github.com/Zedran/life/src/world"
 )
 
-// Size of the border between cells in pixels
+// Size of the border between cells [px]
 const BORDER_SIZE float32 =  1
 
 /* Represents graphical world of the game. */
