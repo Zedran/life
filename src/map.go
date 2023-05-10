@@ -7,13 +7,8 @@ import (
 	"github.com/Zedran/life/src/world"
 )
 
-const (
-	// Maximum allowed zoom
-	ZOOM_MAX    float32 = 20
-
-	// Size of the border between cells in pixels
-	BORDER_SIZE float32 =  1
-)
+// Size of the border between cells in pixels
+const BORDER_SIZE float32 =  1
 
 /* Represents graphical world of the game. */
 type Map struct {
@@ -203,7 +198,7 @@ func NewMap(windowWidth, windowHeight float32, theme *config.Theme, world *world
 	m.Theme      = theme
 	m.World      = world
 
-	m.ZoomSteps  = GetCommonDivisors(config.ZOOM_MIN, ZOOM_MAX, windowWidth, windowHeight)
+	m.ZoomSteps  = GetCommonDivisors(config.ZOOM_MIN, config.ZOOM_MAX, windowWidth, windowHeight)
 
 	maxTileSize := int(m.ZoomSteps[len(m.ZoomSteps) - 1] - BORDER_SIZE)
 

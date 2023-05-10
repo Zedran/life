@@ -5,6 +5,9 @@ const (
 
 	// Minimum zoom value
 	ZOOM_MIN        float32 =  2
+
+	// Maximum allowed zoom
+	ZOOM_MAX        float32 = 20
 )
 
 /* Configuration of the game. */
