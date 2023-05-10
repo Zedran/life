@@ -8,9 +8,6 @@ import (
 )
 
 const (
-	// Initial zoom level
-	ZOOM_INIT   float32 =  8
-
 	// Maximum allowed zoom
 	ZOOM_MAX    float32 = 20
 
@@ -70,7 +67,7 @@ type Map struct {
 */
 func (m *Map) AdjustZoomLevel(direction int) {
 	if direction == 0 {
-		m.Zoom = Index(m.ZoomSteps, ZOOM_INIT)
+		m.Zoom = Index(m.ZoomSteps, GetClosestToMean(m.ZoomSteps))
 
 		m.RowLength  = m.WindowW / m.ZoomSteps[m.Zoom]
 		m.ColHeight  = m.WindowH / m.ZoomSteps[m.Zoom]
