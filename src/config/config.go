@@ -4,7 +4,7 @@ const (
 	CONFIG_LOCATION string  = "config.json"
 
 	// Minimum zoom value
-	ZOOM_MIN        float32 =  2
+	ZOOM_MIN        float32 =  4
 
 	// Maximum allowed zoom
 	ZOOM_MAX        float32 = 20
@@ -33,7 +33,7 @@ func LoadConfig() *Config {
 /* Returns the default game configuration. */
 func LoadDefaultConfig() *Config {
 	return &Config{
-		WorldSize: 720 / int(ZOOM_MIN),
+		WorldSize: 720 / int(ZOOM_MIN / 2),
 		Language : &Language{
 			Title: "Game of Life",
 		},
