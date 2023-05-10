@@ -2,7 +2,6 @@ package main
 
 import (
 	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/vector"
 
 	"github.com/Zedran/life/src/config"
 	"github.com/Zedran/life/src/world"
@@ -24,6 +23,16 @@ type Map struct {
 	// Cached image of the map with all the cells dead. Alive cells are drawn on top. 
 	// Creating the whole map from scratch every frame significantly hinders performance.
 	Background *ebiten.Image
+
+	// Image of alive cell at maximum zoom
+	AliveImg *ebiten.Image
+
+	// Image of dead cell at maximum zoom
+	DeadImg  *ebiten.Image
+
+	// A fraction of maximum cell size by which cell images must be transformed 
+	// to fit the grid at current zoom level
+	CellScale  float64
 
 	// Number of cells displayed in one row
 	RowLength  float32
@@ -65,6 +74,9 @@ func (m *Map) AdjustZoomLevel(direction int) {
 
 		m.RowLength  = m.WindowW / m.ZoomSteps[m.Zoom]
 		m.ColHeight  = m.WindowH / m.ZoomSteps[m.Zoom]
+		
+		m.RecalculateCellScale()
+		
 		m.CreateBackground()
 		return
 	}
@@ -89,6 +101,8 @@ func (m *Map) AdjustZoomLevel(direction int) {
 
 	m.Move(dX, dY)
 
+	m.RecalculateCellScale()
+
 	m.CreateBackground()
 }
 
@@ -102,44 +116,44 @@ func (m *Map) CenterView() {
 func (m *Map) CreateBackground() {
 	m.Background.Fill(m.Theme.Background)
 
-	cellSize := m.ZoomSteps[m.Zoom] - BORDER_SIZE
+	op := &ebiten.DrawImageOptions{}
+
+	op.GeoM.Scale(m.CellScale, m.CellScale)
 
 	for y := float32(0); y < m.ColHeight; y++ {
 		for x := float32(0); x < m.RowLength; x++ {
-			vector.DrawFilledRect(
-				m.Background, 
-				x * m.ZoomSteps[m.Zoom], 
-				y * m.ZoomSteps[m.Zoom], 
-				cellSize, 
-				cellSize, 
-				m.Theme.CellDead, 
-				false,
-			)
+			m.Background.DrawImage(m.DeadImg, op)
+
+			op.GeoM.Translate(float64(m.ZoomSteps[m.Zoom]), 0)
 		}
+		op.GeoM.Translate(-float64(m.RowLength * m.ZoomSteps[m.Zoom]), float64(m.ZoomSteps[m.Zoom]))
 	}
+}
+
+/* Used to fill cell images. */
+func (m *Map) CreateCellImages() {
+	m.AliveImg.Fill(m.Theme.CellAlive)
+	m.DeadImg.Fill(m.Theme.CellDead)
 }
 
 /* Draws the cached image of the empty map (Map.Background) to the screen and inserts alive cells on top of it. */
 func (m *Map) Draw(screen *ebiten.Image) {
 	screen.DrawImage(m.Background, nil)
 
-	cellSize := m.ZoomSteps[m.Zoom] - BORDER_SIZE
+	op := &ebiten.DrawImageOptions{}
+
+	op.GeoM.Scale(m.CellScale, m.CellScale)
 
 	for y := float32(0); y < m.ColHeight; y++ {
 		for x := float32(0); x < m.RowLength; x++ {
 
 			if m.World.Cells[int(y + m.OffSetY) * m.World.Size + int(x + m.OffSetX)] == world.ALIVE {
-				vector.DrawFilledRect(
-					screen, 
-					x * m.ZoomSteps[m.Zoom], 
-					y * m.ZoomSteps[m.Zoom], 
-					cellSize, 
-					cellSize, 
-					m.Theme.CellAlive, 
-					false,
-				)
+				screen.DrawImage(m.AliveImg, op)
 			}
+
+			op.GeoM.Translate(float64(m.ZoomSteps[m.Zoom]), 0)
 		}
+		op.GeoM.Translate(-float64(m.RowLength * m.ZoomSteps[m.Zoom]), float64(m.ZoomSteps[m.Zoom]))
 	}
 }
 
@@ -174,6 +188,11 @@ func (m *Map) Pan(dX, dY int) {
 	m.Move(float32(dX) / m.ZoomSteps[m.Zoom], float32(dY) / m.ZoomSteps[m.Zoom])
 }
 
+/* Recalculates the fraction of maximum cell size by which Map.AliveImg and Map.DeadImg are scaled. */
+func (m *Map) RecalculateCellScale() {
+	m.CellScale = float64((m.ZoomSteps[m.Zoom] - BORDER_SIZE) / float32(m.AliveImg.Bounds().Dx()))
+}
+
 /* Creates new graphical map of the world. */
 func NewMap(windowWidth, windowHeight float32, theme *config.Theme, world *world.World) *Map {
 	var m Map
@@ -187,9 +206,16 @@ func NewMap(windowWidth, windowHeight float32, theme *config.Theme, world *world
 	m.Theme      = theme
 	m.World      = world
 
-	m.Background = ebiten.NewImage(int(windowWidth), int(windowHeight))
-
 	m.ZoomSteps  = GetCommonDivisors(config.ZOOM_MIN, ZOOM_MAX, windowWidth, windowHeight)
+
+	maxTileSize := int(m.ZoomSteps[len(m.ZoomSteps) - 1] - BORDER_SIZE)
+
+	m.Background = ebiten.NewImage(int(windowWidth), int(windowHeight))
+	
+	m.AliveImg   = ebiten.NewImage(maxTileSize, maxTileSize)
+	m.DeadImg    = ebiten.NewImage(maxTileSize, maxTileSize)
+
+	m.CreateCellImages()
 
 	m.AdjustZoomLevel(0)
 	m.CenterView()
