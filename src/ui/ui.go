@@ -16,11 +16,25 @@ type UI struct {
 
 	// UI struct provided by ebitenui
 	ui         *ebitenui.UI
+
+	// Root container of the UI
+	rootCnt    *widget.Container
+
+	// Lower panel of the UI
+	lowerCnt   *widget.Container
 }
 
 /* Draws UI onto the screen. */
 func (ui *UI) Draw(screen *ebiten.Image) {
 	ui.ui.Draw(screen)
+}
+
+func (ui *UI) Clicked() bool {
+	x, y := ebiten.CursorPosition()
+	
+	pr := ui.lowerCnt.GetWidget().Rect
+
+	return (x >= pr.Min.X && x <= pr.Max.X) && (y >= pr.Min.Y && y <= pr.Max.Y)
 }
 
 /* Updates the UI. Returns UIResponse if widget was interacted with. */
@@ -99,5 +113,7 @@ func NewUI(rules string) (*UI, error) {
 	return &UI{
 		controller: c,
 		ui        : &eui,
+		rootCnt   : root,
+		lowerCnt  : panel,
 	}, nil
 }

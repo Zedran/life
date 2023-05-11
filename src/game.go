@@ -37,6 +37,13 @@ type Game struct {
 	State     GameState
 }
 
+/* Returns true if cursor is within bounds of the main window. */
+func (g *Game) CursorInBounds() bool {
+	x, y := ebiten.CursorPosition()
+
+	return (x >= 0 && x < int(g.Config.Window.W)) && (y >= 0 && y < int(g.Config.Window.H))
+}
+
 /* Draws the map and interface elements onto the screen. */
 func (g *Game) Draw(screen *ebiten.Image) {
 	g.Map.Draw(screen)
@@ -87,16 +94,18 @@ func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeigh
 
 /* Updates the game every tick. */
 func (g *Game) Update() error {
-	if inpututil.IsMouseButtonJustPressed(ebiten.MouseButtonRight) {
-		g.DragEvent = NewDragEvent()
+	if !g.UI.Clicked() {
+		if inpututil.IsMouseButtonJustPressed(ebiten.MouseButtonRight) {
+			g.DragEvent = NewDragEvent()
+		}
+
+		if inpututil.IsMouseButtonJustPressed(ebiten.MouseButtonLeft) {
+			g.DrawEvent = NewDrawEvent(g.Map)	
+		}
 	}
 
 	if g.DragEvent != nil {
 		g.UpdateDragEvent()
-	}
-
-	if inpututil.IsMouseButtonJustPressed(ebiten.MouseButtonLeft) {
-		g.DrawEvent = NewDrawEvent(g.Map)	
 	}
 
 	if g.DrawEvent != nil {
@@ -145,9 +154,10 @@ func (g *Game) UpdateDrawEvent() {
 		return
 	}
 
-	x, y := g.Map.GetCellAtPoint(g.DrawEvent.Position())
-
-	g.Map.SetState(x, y, g.DrawEvent.Draws)
+	if g.CursorInBounds() && !g.UI.Clicked() {
+		x, y := g.Map.GetCellAtPoint(g.DrawEvent.Position())
+		g.Map.SetState(x, y, g.DrawEvent.Draws)
+	}
 }
 
 /* Creates new game. */
