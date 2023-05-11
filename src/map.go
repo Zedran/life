@@ -185,14 +185,20 @@ func (m *Map) Move(dX, dY float32) {
 /* Calls the Map.Move method after translating the movement from graphical measurements into world dimensions. */
 func (m *Map) Pan(dX, dY int) {
 	m.Move(
-		float32(math.Round(float64(float32(dX) / m.ZoomSteps[m.Zoom]))), 
-		float32(math.Round(float64(float32(dY) / m.ZoomSteps[m.Zoom]))),
+		float32(dX) / m.ZoomSteps[m.Zoom], 
+		float32(dY) / m.ZoomSteps[m.Zoom],
 	)
 }
 
 /* Recalculates the fraction of maximum cell size by which Map.AliveImg and Map.DeadImg are scaled. */
 func (m *Map) RecalculateCellScale() {
 	m.CellScale = float64((m.ZoomSteps[m.Zoom] - BORDER_SIZE) / float32(m.AliveImg.Bounds().Dx()))
+}
+
+/* Called after Game.DragEvent finishes its job to eliminate Map.OffSetX and Map.OffSetY inaccuracies. */
+func (m *Map) TruncOffSets() {
+	m.OffSetX = float32(math.Trunc(float64(m.OffSetX)))
+	m.OffSetY = float32(math.Trunc(float64(m.OffSetY)))
 }
 
 /* Creates new graphical map of the world. */

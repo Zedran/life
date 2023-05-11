@@ -134,6 +134,7 @@ func (g *Game) UpdateDragEvent() {
 	g.DragEvent.Update()
 
 	if !g.DragEvent.Active {
+		g.Map.TruncOffSets()
 		g.DragEvent = nil
 		return
 	}
