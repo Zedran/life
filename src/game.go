@@ -19,6 +19,9 @@ type Game struct {
 	// Drag event handles panning of the Game.Map
 	DragEvent *DragEvent
 
+	// Drag event handles drawing states on the Game.Map (LMB + move)
+	DrawEvent *DrawEvent
+
 	// Generations clock manages the speed of transition through generations
 	GenClock  *Clock
 
@@ -90,6 +93,14 @@ func (g *Game) Update() error {
 		g.UpdateDragEvent()
 	}
 
+	if inpututil.IsMouseButtonJustPressed(ebiten.MouseButtonLeft) {
+		g.DrawEvent = NewDrawEvent(g.Map)	
+	}
+
+	if g.DrawEvent != nil {
+		g.UpdateDrawEvent()
+	}
+
 	_, dy := ebiten.Wheel()
 
 	if dy > 0 {
@@ -123,6 +134,20 @@ func (g *Game) UpdateDragEvent() {
 	g.DragEvent.SetNewInit()
 }
 
+/* Updates g.DrawEvent and sets the state of cell at which the cursor is currently pointing. */
+func (g *Game) UpdateDrawEvent() {
+	g.DrawEvent.Update()
+
+	if !g.DrawEvent.Active {
+		g.DrawEvent = nil
+		return
+	}
+
+	x, y := g.Map.GetCellAtPoint(g.DrawEvent.Position())
+
+	g.Map.SetState(x, y, g.DrawEvent.Draws)
+}
+
 /* Creates new game. */
 func NewGame() *Game {
 	config := config.LoadConfig()
@@ -140,6 +165,7 @@ func NewGame() *Game {
 	g := Game{
 		Config   : config,
 		DragEvent: nil,
+		DrawEvent: nil,
 		GenClock : NewClock(),
 		Map      : NewMap(config.Window.W, config.Window.H, config.Theme, w),
 		UI       : ui,

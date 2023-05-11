@@ -151,9 +151,14 @@ func (m *Map) Draw(screen *ebiten.Image) {
 
 /* Accepts a screen position in pixels and returns coordinates (x, y) of a cell at this position. */
 func (m *Map) GetCellAtPoint(pX, pY int) (x, y int) {
-	x = int(float32(pX) * m.RowLength / m.WindowW)
-	y = int(float32(pY) * m.ColHeight / m.WindowH)
+	x = int(float32(pX) * m.RowLength / m.WindowW + m.OffSetX)
+	y = int(float32(pY) * m.ColHeight / m.WindowH + m.OffSetY)
 	return 
+}
+
+/* Sets the state s of the cell at (x, y) coordinates. */
+func (m *Map) SetState(x, y int, s world.State) {
+	m.World.Cells[y * m.World.Size + x] = s
 }
 
 /* Offsets the map by specified number of cells. Does nothing for values that exceed the world bounds. */
