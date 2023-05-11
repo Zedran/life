@@ -62,8 +62,10 @@ func (g *Game) HandleControllerInput(uiResp *ui.UIResponse) {
 		g.GenClock.AdjustSpeed(1)
 	case ui.RESET_STATE:
 		g.World.Reset()
+		g.State = PAUSE
 	case ui.RANDOM_STATE:
 		g.World.RandomState(5)
+		g.State = PAUSE
 	case ui.FF_I:
 		g.World.Update()
 	case ui.FF_X:
