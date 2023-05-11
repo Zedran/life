@@ -1,6 +1,8 @@
 package main
 
 import (
+	"math"
+
 	"github.com/hajimehoshi/ebiten/v2"
 
 	"github.com/Zedran/life/src/config"
@@ -182,7 +184,10 @@ func (m *Map) Move(dX, dY float32) {
 
 /* Calls the Map.Move method after translating the movement from graphical measurements into world dimensions. */
 func (m *Map) Pan(dX, dY int) {
-	m.Move(float32(dX) / m.ZoomSteps[m.Zoom], float32(dY) / m.ZoomSteps[m.Zoom])
+	m.Move(
+		float32(math.Round(float64(float32(dX) / m.ZoomSteps[m.Zoom]))), 
+		float32(math.Round(float64(float32(dY) / m.ZoomSteps[m.Zoom]))),
+	)
 }
 
 /* Recalculates the fraction of maximum cell size by which Map.AliveImg and Map.DeadImg are scaled. */
