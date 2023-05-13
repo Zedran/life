@@ -8,7 +8,7 @@ fi
 failed=0
 
 for package in ./src ./src/world; do
-    go test -v $package
+    go test $package
     
     if [ $? -ne 0 ]; then
         failed=1
