@@ -125,10 +125,10 @@ func (g *Game) Update() error {
 
 	if dy > 0 {
 		g.Map.AdjustZoomLevel(1)
-		g.UI.UpdateZoomValue(g.Map.ZoomSteps[g.Map.Zoom])
+		g.UI.UpdateZoomValue(g.Map.GetCurrentZoom())
 	} else if dy < 0 {
 		g.Map.AdjustZoomLevel(-1)
-		g.UI.UpdateZoomValue(g.Map.ZoomSteps[g.Map.Zoom])
+		g.UI.UpdateZoomValue(g.Map.GetCurrentZoom())
 	}
 
 	g.HandleControllerInput(g.UI.Update())
@@ -199,7 +199,7 @@ func NewGame() *Game {
 	}
 
 	g.UI.UpdateSpeedValue(g.GenClock.GetEventsPerSec())
-	g.UI.UpdateZoomValue(g.Map.ZoomSteps[g.Map.Zoom])
+	g.UI.UpdateZoomValue(g.Map.GetCurrentZoom())
 	g.UI.UpdateGenValue(0)
 
 	return &g

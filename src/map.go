@@ -66,8 +66,8 @@ func (m *Map) AdjustZoomLevel(direction int) {
 	if direction == 0 {
 		m.Zoom = Index(m.ZoomSteps, GetClosestToMean(m.ZoomSteps))
 
-		m.RowLength  = m.WindowW / m.ZoomSteps[m.Zoom]
-		m.ColHeight  = m.WindowH / m.ZoomSteps[m.Zoom]
+		m.RowLength  = m.WindowW / m.GetCurrentZoom()
+		m.ColHeight  = m.WindowH / m.GetCurrentZoom()
 		
 		m.RecalculateCellScale()
 		
@@ -84,8 +84,8 @@ func (m *Map) AdjustZoomLevel(direction int) {
 
 	m.Zoom += direction
 
-	m.RowLength  = m.WindowW / m.ZoomSteps[m.Zoom]
-	m.ColHeight  = m.WindowH / m.ZoomSteps[m.Zoom]
+	m.RowLength  = m.WindowW / m.GetCurrentZoom()
+	m.ColHeight  = m.WindowH / m.GetCurrentZoom()
 
 	cursorX, cursorY = ebiten.CursorPosition()
 	newX, newY       := m.GetCellAtPoint(cursorX, cursorY)
@@ -118,9 +118,9 @@ func (m *Map) CreateBackground() {
 		for x := float32(0); x < m.RowLength; x++ {
 			m.Background.DrawImage(m.DeadImg, op)
 
-			op.GeoM.Translate(float64(m.ZoomSteps[m.Zoom]), 0)
+			op.GeoM.Translate(float64(m.GetCurrentZoom()), 0)
 		}
-		op.GeoM.Translate(-float64(m.RowLength * m.ZoomSteps[m.Zoom]), float64(m.ZoomSteps[m.Zoom]))
+		op.GeoM.Translate(-float64(m.RowLength * m.GetCurrentZoom()), float64(m.GetCurrentZoom()))
 	}
 }
 
@@ -145,9 +145,9 @@ func (m *Map) Draw(screen *ebiten.Image) {
 				screen.DrawImage(m.AliveImg, op)
 			}
 
-			op.GeoM.Translate(float64(m.ZoomSteps[m.Zoom]), 0)
+			op.GeoM.Translate(float64(m.GetCurrentZoom()), 0)
 		}
-		op.GeoM.Translate(-float64(m.RowLength * m.ZoomSteps[m.Zoom]), float64(m.ZoomSteps[m.Zoom]))
+		op.GeoM.Translate(-float64(m.RowLength * m.GetCurrentZoom()), float64(m.GetCurrentZoom()))
 	}
 }
 
@@ -156,6 +156,11 @@ func (m *Map) GetCellAtPoint(pX, pY int) (x, y int) {
 	x = int(float32(pX) * m.RowLength / m.WindowW + m.OffSetX)
 	y = int(float32(pY) * m.ColHeight / m.WindowH + m.OffSetY)
 	return 
+}
+
+/* Get current zoom level. */
+func (m *Map) GetCurrentZoom() float32 {
+	return m.ZoomSteps[m.Zoom]
 }
 
 /* Sets the state s of the cell at (x, y) coordinates. */
@@ -185,14 +190,14 @@ func (m *Map) Move(dX, dY float32) {
 /* Calls the Map.Move method after translating the movement from graphical measurements into world dimensions. */
 func (m *Map) Pan(dX, dY int) {
 	m.Move(
-		float32(dX) / m.ZoomSteps[m.Zoom], 
-		float32(dY) / m.ZoomSteps[m.Zoom],
+		float32(dX) / m.GetCurrentZoom(), 
+		float32(dY) / m.GetCurrentZoom(),
 	)
 }
 
 /* Recalculates the fraction of maximum cell size by which Map.AliveImg and Map.DeadImg are scaled. */
 func (m *Map) RecalculateCellScale() {
-	m.CellScale = float64((m.ZoomSteps[m.Zoom] - BORDER_SIZE) / float32(m.AliveImg.Bounds().Dx()))
+	m.CellScale = float64((m.GetCurrentZoom() - BORDER_SIZE) / float32(m.AliveImg.Bounds().Dx()))
 }
 
 /* Called after Game.DragEvent finishes its job to eliminate Map.OffSetX and Map.OffSetY inaccuracies. */
