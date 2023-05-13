@@ -65,24 +65,33 @@ func (g *Game) HandleControllerInput(uiResp *ui.UIResponse) {
 		}
 	case ui.SLOW_DOWN:
 		g.GenClock.AdjustSpeed(-1)
+		g.UI.UpdateSpeedValue(ebiten.MaxTPS() / g.GenClock.SpeedDial[g.GenClock.CurrentSpeed])
 	case ui.SPEED_UP:
 		g.GenClock.AdjustSpeed(1)
+		g.UI.UpdateSpeedValue(ebiten.MaxTPS() / g.GenClock.SpeedDial[g.GenClock.CurrentSpeed])
 	case ui.RESET_STATE:
 		g.World.Reset()
 		g.State = PAUSE
+		g.UI.UpdateGenValue(g.World.Generation)
 	case ui.RANDOM_STATE:
 		g.World.RandomState(5)
 		g.State = PAUSE
+		g.UI.UpdateGenValue(g.World.Generation)
 	case ui.FF_I:
 		g.World.Update()
+		g.UI.UpdateGenValue(g.World.Generation)
 	case ui.FF_X:
 		g.World.UpdateBy(10)
+		g.UI.UpdateGenValue(g.World.Generation)
 	case ui.FF_L:
 		g.World.UpdateBy(50)
+		g.UI.UpdateGenValue(g.World.Generation)
 	case ui.FF_C:
 		g.World.UpdateBy(100)
+		g.UI.UpdateGenValue(g.World.Generation)
 	case ui.FF_M:
 		g.World.UpdateBy(1000)
+		g.UI.UpdateGenValue(g.World.Generation)
 	case ui.NEW_RULES:
 		g.World.Rules, _ = world.NewRules(uiResp.Rules)
 	}
@@ -116,14 +125,17 @@ func (g *Game) Update() error {
 
 	if dy > 0 {
 		g.Map.AdjustZoomLevel(1)
+		g.UI.UpdateZoomValue(g.Map.ZoomSteps[g.Map.Zoom])
 	} else if dy < 0 {
 		g.Map.AdjustZoomLevel(-1)
+		g.UI.UpdateZoomValue(g.Map.ZoomSteps[g.Map.Zoom])
 	}
 
 	g.HandleControllerInput(g.UI.Update())
 
 	if g.State == RUN && g.GenClock.Tick() == TRIGGER {
 		g.World.Update()
+		g.UI.UpdateGenValue(g.World.Generation)
 	}
 
 	return nil
@@ -185,6 +197,10 @@ func NewGame() *Game {
 		World    : w,
 		State    : PAUSE,
 	}
+
+	g.UI.UpdateSpeedValue(ebiten.MaxTPS() / g.GenClock.SpeedDial[g.GenClock.CurrentSpeed])
+	g.UI.UpdateZoomValue(g.Map.ZoomSteps[g.Map.Zoom])
+	g.UI.UpdateGenValue(0)
 
 	return &g
 }

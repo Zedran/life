@@ -29,15 +29,6 @@ func NewButton(font *font.Face, text string, c *Controller, s UISignal) *widget.
 				Bottom: 5,
 			},
 		),
-
-		widget.ButtonOpts.WidgetOpts(
-			widget.WidgetOpts.LayoutData(
-				widget.GridLayoutData{
-					HorizontalPosition: widget.GridLayoutPositionCenter,
-					VerticalPosition: widget.GridLayoutPositionStart,
-				},
-			),
-		),
 	)
 
 	button.Configure(
@@ -64,6 +55,17 @@ func NewButton(font *font.Face, text string, c *Controller, s UISignal) *widget.
 	)
 
 	return button
+}
+
+/* Returns a pointer to the container designed to hold buttons that serve similar functions. */
+func NewButtonCluster() *widget.Container {
+	return widget.NewContainer(
+		widget.ContainerOpts.Layout(
+			widget.NewRowLayout(
+				widget.RowLayoutOpts.Spacing(5),
+			),
+		),
+	)
 }
 
 func loadButtonImage() *widget.ButtonImage {

@@ -1,10 +1,9 @@
 package ui
 
 import (
-	"image/color"
+	"fmt"
 
 	"github.com/ebitenui/ebitenui"
-	"github.com/ebitenui/ebitenui/image"
 	"github.com/ebitenui/ebitenui/widget"
 	"github.com/hajimehoshi/ebiten/v2"
 )
@@ -18,10 +17,22 @@ type UI struct {
 	ui         *ebitenui.UI
 
 	// Root container of the UI
-	rootCnt    *widget.Container
+	root       *widget.Container
 
-	// Lower panel of the UI
-	lowerCnt   *widget.Container
+	// Info panel
+	info       *widget.Container
+
+	// Control panel
+	panel      *widget.Container
+
+	// Generation
+	genValue   *widget.Label
+
+	// Current zoom
+	zoomValue  *widget.Label
+
+	// Current speed
+	speedValue *widget.Label
 }
 
 /* Draws UI onto the screen. */
@@ -29,12 +40,19 @@ func (ui *UI) Draw(screen *ebiten.Image) {
 	ui.ui.Draw(screen)
 }
 
+/* Called on click. Returns true if a mouse cursor is inside one of the panels. */
 func (ui *UI) Clicked() bool {
 	x, y := ebiten.CursorPosition()
 	
-	pr := ui.lowerCnt.GetWidget().Rect
+	for _, c := range []*widget.Container{ui.info, ui.panel} {
+		r := c.GetWidget().Rect
+		
+		if (x >= r.Min.X && x <= r.Max.X) && (y >= r.Min.Y && y <= r.Max.Y) {
+			return true
+		}
+	}
 
-	return (x >= pr.Min.X && x <= pr.Max.X) && (y >= pr.Min.Y && y <= pr.Max.Y)
+	return false
 }
 
 /* Updates the UI. Returns UIResponse if widget was interacted with. */
@@ -48,62 +66,46 @@ func (ui *UI) Update() *UIResponse {
 	return nil
 }
 
+/* Sets the generation label text to new value. */
+func (ui *UI) UpdateGenValue(new uint64) {
+	ui.genValue.Label = fmt.Sprintf("%-6d", new)
+}
+
+/* Sets the current speed label text to new value. */
+func (ui *UI) UpdateSpeedValue(new int) {
+	ui.speedValue.Label = fmt.Sprintf("%-3d", new)
+}
+
+/* Sets the current zoom label text to new value. */
+func (ui *UI) UpdateZoomValue(new float32) {
+	ui.zoomValue.Label = fmt.Sprintf("%-3.0f", new)
+}
+
 /* Creates UI elements: containers, widgets and the corresponding Controller. */
 func NewUI(rules string) (*UI, error) {
-	root := widget.NewContainer(
-		widget.ContainerOpts.Layout(
-			widget.NewAnchorLayout(
-			),
-		),
-	)
+	root   := createRoot()
+	spacer := createSpacer()
+	info   := createInfo()
+	panel  := createPanel()
 
-	panel := widget.NewContainer(
-		widget.ContainerOpts.Layout(
-			widget.NewGridLayout(
-				widget.GridLayoutOpts.Padding(
-					widget.Insets{
-						Left:   10,
-						Right:  10,
-						Top:    10,
-						Bottom: 10,
-					},
-				),
-				widget.GridLayoutOpts.Columns(12),
-				widget.GridLayoutOpts.Spacing(5, 5),
-			),
-		),
-		widget.ContainerOpts.BackgroundImage(image.NewNineSliceColor(color.NRGBA{150, 150, 150, 150})),
+	font, err := loadFont(15)
+	if err != nil {
+		return nil, err
+	}
 
-		widget.ContainerOpts.WidgetOpts(
-			widget.WidgetOpts.LayoutData(
-				widget.AnchorLayoutData{
-					HorizontalPosition: widget.AnchorLayoutPositionCenter,
-					VerticalPosition:   widget.AnchorLayoutPositionEnd,
-					StretchHorizontal:  true,
-				},
-			),
-		),
-	)
-
-	font, err := loadFont(20)
+	monoFont, err := loadMonoFont(15)
 	if err != nil {
 		return nil, err
 	}
 
 	c := NewController(rules)
 
-	panel.AddChild(NewButton(&font, string([]rune{0x25ba, 0x007c}), c, PLAY_TOGGLE))
-	panel.AddChild(NewButton(&font, "-", c, SLOW_DOWN))
-	panel.AddChild(NewButton(&font, "+", c, SPEED_UP))
-	panel.AddChild(NewButton(&font, string(0x00d8), c, RESET_STATE))
-	panel.AddChild(NewButton(&font, string([]rune{0x2591, 0x2591}), c, RANDOM_STATE))
-	panel.AddChild(NewButton(&font, "I", c, FF_I))
-	panel.AddChild(NewButton(&font, "X", c, FF_X))
-	panel.AddChild(NewButton(&font, "L", c, FF_L))
-	panel.AddChild(NewButton(&font, "C", c, FF_C))
-	panel.AddChild(NewButton(&font, "M", c, FF_M))
-	panel.AddChild(NewTextInput(&font, "Rules", rules, c, NEW_RULES))
+	gv, sv, zv := createInfoElements(&monoFont, info)
 
+	createPanelElements(&font, c, rules, panel)
+
+	root.AddChild(spacer)
+	root.AddChild(info)
 	root.AddChild(panel)
 
 	eui := ebitenui.UI{
@@ -113,7 +115,11 @@ func NewUI(rules string) (*UI, error) {
 	return &UI{
 		controller: c,
 		ui        : &eui,
-		rootCnt   : root,
-		lowerCnt  : panel,
+		root      : root,
+		info      : info,
+		panel     : panel,
+		genValue  : gv,
+		zoomValue : zv,
+		speedValue: sv,
 	}, nil
 }
