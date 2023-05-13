@@ -65,10 +65,10 @@ func (g *Game) HandleControllerInput(uiResp *ui.UIResponse) {
 		}
 	case ui.SLOW_DOWN:
 		g.GenClock.AdjustSpeed(-1)
-		g.UI.UpdateSpeedValue(ebiten.MaxTPS() / g.GenClock.SpeedDial[g.GenClock.CurrentSpeed])
+		g.UI.UpdateSpeedValue(g.GenClock.GetEventsPerSec())
 	case ui.SPEED_UP:
 		g.GenClock.AdjustSpeed(1)
-		g.UI.UpdateSpeedValue(ebiten.MaxTPS() / g.GenClock.SpeedDial[g.GenClock.CurrentSpeed])
+		g.UI.UpdateSpeedValue(g.GenClock.GetEventsPerSec())
 	case ui.RESET_STATE:
 		g.World.Reset()
 		g.State = PAUSE
@@ -198,7 +198,7 @@ func NewGame() *Game {
 		State    : PAUSE,
 	}
 
-	g.UI.UpdateSpeedValue(ebiten.MaxTPS() / g.GenClock.SpeedDial[g.GenClock.CurrentSpeed])
+	g.UI.UpdateSpeedValue(g.GenClock.GetEventsPerSec())
 	g.UI.UpdateZoomValue(g.Map.ZoomSteps[g.Map.Zoom])
 	g.UI.UpdateGenValue(0)
 
