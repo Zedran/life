@@ -19,10 +19,10 @@ type Map struct {
 	Background *ebiten.Image
 
 	// Image of alive cell at maximum zoom
-	AliveImg *ebiten.Image
+	AliveImg   *ebiten.Image
 
 	// Image of dead cell at maximum zoom
-	DeadImg  *ebiten.Image
+	DeadImg    *ebiten.Image
 
 	// A fraction of maximum cell size by which cell images must be transformed 
 	// to fit the grid at current zoom level
