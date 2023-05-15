@@ -1,6 +1,7 @@
 package ui
 
 import (
+	"github.com/Zedran/life/src/config/lang"
 	"github.com/Zedran/life/src/config/theme"
 	"github.com/ebitenui/ebitenui/widget"
 	"golang.org/x/image/font"
@@ -12,10 +13,10 @@ import (
 		sv - speed value
 		zv - zoom value
 */
-func createInfoElements(theme *theme.UITheme, font *font.Face, info *widget.Container) (gv, sv, zv *widget.Label) {
-	genDisplay,  gv := NewLabeledDisplay(theme.Generation, font, "Generation")
-	spdDisplay,  sv := NewLabeledDisplay(theme.Speed,      font, "Speed")
-	zoomDisplay, zv := NewLabeledDisplay(theme.Zoom,       font, "Zoom")
+func createInfoElements(theme *theme.UITheme, lang *lang.Language, font *font.Face, info *widget.Container) (gv, sv, zv *widget.Label) {
+	genDisplay,  gv := NewLabeledDisplay(theme.Generation, font, lang.Generation)
+	spdDisplay,  sv := NewLabeledDisplay(theme.Speed,      font, lang.Speed     )
+	zoomDisplay, zv := NewLabeledDisplay(theme.Zoom,       font, lang.Zoom      )
 
 	info.AddChild(genDisplay)
 	info.AddChild(spdDisplay)

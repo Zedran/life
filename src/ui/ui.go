@@ -3,6 +3,7 @@ package ui
 import (
 	"fmt"
 
+	"github.com/Zedran/life/src/config/lang"
 	"github.com/Zedran/life/src/config/theme"
 	"github.com/ebitenui/ebitenui"
 	"github.com/ebitenui/ebitenui/widget"
@@ -83,7 +84,7 @@ func (ui *UI) UpdateZoomValue(new float32) {
 }
 
 /* Creates UI elements: containers, widgets and the corresponding Controller. */
-func NewUI(uit *theme.UITheme, rules string) (*UI, error) {
+func NewUI(uit *theme.UITheme, lang *lang.Language, rules string) (*UI, error) {
 	root   := createRoot()
 	spacer := createSpacer()
 	info   := createInfo(uit)
@@ -101,7 +102,7 @@ func NewUI(uit *theme.UITheme, rules string) (*UI, error) {
 
 	c := NewController(rules)
 
-	gv, sv, zv := createInfoElements(uit, &monoFont, info)
+	gv, sv, zv := createInfoElements(uit, lang, &monoFont, info)
 
 	createPanelElements(uit, &font, c, rules, panel)
 

@@ -182,7 +182,7 @@ func NewGame() *Game {
 
 	w := world.Genesis(config.WorldSize)
 	
-	ui, err := ui.NewUI(config.Theme.UITheme, world.DEFAULT_RULES)
+	ui, err := ui.NewUI(config.Theme.UITheme, config.Language, world.DEFAULT_RULES)
 	if err != nil {
 		log.Fatal(err)
 	}

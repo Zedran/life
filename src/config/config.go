@@ -3,6 +3,7 @@ package config
 import (
 	"path/filepath"
 
+	"github.com/Zedran/life/src/config/lang"
 	"github.com/Zedran/life/src/config/theme"
 )
 
@@ -12,6 +13,9 @@ const (
 
 	// Config file
 	CONFIG_PATH     string  = CONFIG_DIR + "/config.json"
+
+	// Languages directory
+	LANG_DIR        string  = CONFIG_DIR + "/languages"
 
 	// Theme directory
 	THEME_DIR       string  = CONFIG_DIR + "/themes"
@@ -29,7 +33,7 @@ type Config struct {
 	WorldSize int
 
 	// Language of the game
-	Language  *Language
+	Language  *lang.Language
 
 	// Color theme of the game
 	Theme     *theme.Theme
@@ -47,9 +51,7 @@ func LoadConfig() *Config {
 func LoadDefaultConfig() *Config {
 	return &Config{
 		WorldSize: 720 / int(ZOOM_MIN / 2),
-		Language : &Language{
-			Title: "Game of Life",
-		},
+		Language : lang.LoadLanguage(filepath.Join(LANG_DIR, "")),
 		Theme    : theme.LoadTheme(filepath.Join(THEME_DIR, "")),
 		Window   : &Window{
 			W    : 720,
