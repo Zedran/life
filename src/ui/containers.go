@@ -1,14 +1,13 @@
 package ui
 
 import (
-	"image/color"
-
+	"github.com/Zedran/life/src/config/theme"
 	"github.com/ebitenui/ebitenui/image"
 	"github.com/ebitenui/ebitenui/widget"
 )
 
 /* Creates the info panel holding information about the current state of the game. */
-func createInfo() *widget.Container {
+func createInfo(uit *theme.UITheme) *widget.Container {
 	return widget.NewContainer(
 		widget.ContainerOpts.Layout(
 			widget.NewGridLayout(
@@ -25,12 +24,12 @@ func createInfo() *widget.Container {
 				widget.GridLayoutOpts.Stretch([]bool{true, true, true}, []bool{false}),
 			),
 		),
-		widget.ContainerOpts.BackgroundImage(image.NewNineSliceColor(color.NRGBA{0x2b, 0x2b, 0x2b, 240})),
+		widget.ContainerOpts.BackgroundImage(image.NewNineSliceColor(uit.InfoPanel.Background)),
 	)
 }
 
 /* Creates the panel container that allows the user to control the game. */
-func createPanel() *widget.Container {
+func createPanel(uit *theme.UITheme) *widget.Container {
 	return widget.NewContainer(
 		widget.ContainerOpts.Layout(
 			widget.NewGridLayout(
@@ -46,7 +45,7 @@ func createPanel() *widget.Container {
 				widget.GridLayoutOpts.Spacing(15, 15),
 			),
 		),
-		widget.ContainerOpts.BackgroundImage(image.NewNineSliceColor(color.NRGBA{0x2b, 0x2b, 0x2b, 240})),
+		widget.ContainerOpts.BackgroundImage(image.NewNineSliceColor(uit.CtrlPanel.Background)),
 	)
 }
 

@@ -1,16 +1,15 @@
 package ui
 
 import (
-	"image/color"
-
+	"github.com/Zedran/life/src/config/theme"
 	"github.com/ebitenui/ebitenui/widget"
 	"golang.org/x/image/font"
 )
 
 /* Creates a label with specified text and returns a pointer to it. */
-func NewLabel(font *font.Face, text string) *widget.Label {
+func NewLabel(lt *theme.LabelTheme, font *font.Face, text string) *widget.Label {
 	label := widget.NewLabel(
-		widget.LabelOpts.Text(text, *font, loadLabelColor()),
+		widget.LabelOpts.Text(text, *font, loadLabelColor(lt)),
 	)
 
 	return label
@@ -23,9 +22,9 @@ func NewLabel(font *font.Face, text string) *widget.Label {
 	zoom level. This function returns a container holding both labels and the label serving as a value holder. 
 	Accepts the title text.
 */
-func NewLabeledDisplay(font *font.Face, labelText string) (*widget.Container, *widget.Label) {
-	label := NewLabel(font, labelText)
-	val   := NewLabel(font, "")
+func NewLabeledDisplay(lt *theme.LabelTheme, font *font.Face, labelText string) (*widget.Container, *widget.Label) {
+	label := NewLabel(lt, font, labelText)
+	val   := NewLabel(lt, font, "")
 
 	display := widget.NewContainer(
 		widget.ContainerOpts.Layout(	
@@ -49,8 +48,8 @@ func NewLabeledDisplay(font *font.Face, labelText string) (*widget.Container, *w
 	return display, val
 }
 
-func loadLabelColor() *widget.LabelColor {
+func loadLabelColor(lt *theme.LabelTheme) *widget.LabelColor {
 	return &widget.LabelColor{
-		Idle: color.RGBA{0xff, 0xff, 0xff, 0xff},
+		Idle: lt.Text,
 	}
 }

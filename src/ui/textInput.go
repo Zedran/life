@@ -1,8 +1,7 @@
 package ui
 
 import (
-	"image/color"
-
+	"github.com/Zedran/life/src/config/theme"
 	"github.com/ebitenui/ebitenui/image"
 	"github.com/ebitenui/ebitenui/widget"
 	"golang.org/x/image/font"
@@ -12,13 +11,13 @@ import (
 	Returns new widget.TextInput. Accepts font, placeholder (text displayed when empty), text to display,
 	Controller and UISignal associated with the TextInput.
 */
-func NewTextInput(font *font.Face, placeholder, text string, c *Controller, s UISignal) *widget.TextInput {
+func NewTextInput(tit *theme.TextInputTheme, font *font.Face, placeholder, text string, c *Controller, s UISignal) *widget.TextInput {
 	ti := widget.NewTextInput(
-		widget.TextInputOpts.Image(loadTextInputImage()),
+		widget.TextInputOpts.Image(loadTextInputImage(tit)),
 
 		widget.TextInputOpts.Face(*font),
 
-		widget.TextInputOpts.Color(loadTextInputFontColor()),
+		widget.TextInputOpts.Color(loadTextInputFontColor(tit)),
 
 		widget.TextInputOpts.Padding(widget.NewInsetsSimple(5)),
 
@@ -49,17 +48,17 @@ func NewTextInput(font *font.Face, placeholder, text string, c *Controller, s UI
 	return ti
 }
 
-func loadTextInputImage() *widget.TextInputImage {
+func loadTextInputImage(tit *theme.TextInputTheme) *widget.TextInputImage {
 	return &widget.TextInputImage{
-		Idle:     image.NewNineSliceColor(color.RGBA{R: 100, G: 100, B: 100, A: 255}),
+		Idle:     image.NewNineSliceColor(tit.Text),
 	}
 }
 
-func loadTextInputFontColor() *widget.TextInputColor {
+func loadTextInputFontColor(tit *theme.TextInputTheme) *widget.TextInputColor {
 	return &widget.TextInputColor{
-		Idle:          color.White,
-		Disabled:      color.RGBA{R: 200, G: 200, B: 200, A: 255},
-		Caret:         color.White,
-		DisabledCaret: color.RGBA{R: 200, G: 200, B: 200, A: 255},
+		Idle:          tit.Idle,
+		Disabled:      tit.Disabled,
+		Caret:         tit.Caret,
+		DisabledCaret: tit.DisabledCaret,
 	}
 }

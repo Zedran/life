@@ -1,7 +1,20 @@
 package config
 
+import (
+	"path/filepath"
+
+	"github.com/Zedran/life/src/config/theme"
+)
+
 const (
-	CONFIG_LOCATION string  = "config.json"
+	// Top of the config file path
+	CONFIG_DIR      string  = "config"
+
+	// Config file
+	CONFIG_PATH     string  = CONFIG_DIR + "/config.json"
+
+	// Theme directory
+	THEME_DIR       string  = CONFIG_DIR + "/themes"
 
 	// Minimum zoom value
 	ZOOM_MIN        float32 =  4
@@ -18,8 +31,8 @@ type Config struct {
 	// Language of the game
 	Language  *Language
 
-	// Color theme
-	Theme     *Theme
+	// Color theme of the game
+	Theme     *theme.Theme
 
 	// Window configuration
 	Window    *Window
@@ -37,7 +50,7 @@ func LoadDefaultConfig() *Config {
 		Language : &Language{
 			Title: "Game of Life",
 		},
-		Theme    : LoadDefaultTheme(),
+		Theme    : theme.LoadTheme(filepath.Join(THEME_DIR, "")),
 		Window   : &Window{
 			W    : 720,
 			H    : 480,

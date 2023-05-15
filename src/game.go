@@ -182,7 +182,7 @@ func NewGame() *Game {
 
 	w := world.Genesis(config.WorldSize)
 	
-	ui, err := ui.NewUI(world.DEFAULT_RULES)
+	ui, err := ui.NewUI(config.Theme.UITheme, world.DEFAULT_RULES)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -192,7 +192,7 @@ func NewGame() *Game {
 		DragEvent: nil,
 		DrawEvent: nil,
 		GenClock : NewClock(),
-		Map      : NewMap(config.Window.W, config.Window.H, config.Theme, w),
+		Map      : NewMap(config.Window.W, config.Window.H, config.Theme.MapTheme, w),
 		UI       : ui,
 		World    : w,
 		State    : PAUSE,

@@ -6,6 +6,7 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 
 	"github.com/Zedran/life/src/config"
+	"github.com/Zedran/life/src/config/theme"
 	"github.com/Zedran/life/src/world"
 )
 
@@ -45,7 +46,7 @@ type Map struct {
 	WindowH    float32
 
 	// A pointer to color theme of the game
-	Theme      *config.Theme
+	Theme      *theme.MapTheme
 
 	// A pointer to the logical world of the game
 	World      *world.World
@@ -207,7 +208,7 @@ func (m *Map) TruncOffSets() {
 }
 
 /* Creates new graphical map of the world. */
-func NewMap(windowWidth, windowHeight float32, theme *config.Theme, world *world.World) *Map {
+func NewMap(windowWidth, windowHeight float32, theme *theme.MapTheme, world *world.World) *Map {
 	var m Map
 
 	m.WindowW    = windowWidth

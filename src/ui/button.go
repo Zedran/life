@@ -1,23 +1,22 @@
 package ui
 
 import (
-	"image/color"
-
+	"github.com/Zedran/life/src/config/theme"
 	"github.com/ebitenui/ebitenui/image"
 	"github.com/ebitenui/ebitenui/widget"
 	"golang.org/x/image/font"
 )
 
 /* Returns the new widget.Button given font, text to display, Controller and signal corresponding with the Button. */
-func NewButton(font *font.Face, text string, c *Controller, s UISignal) *widget.Button {
+func NewButton(bt *theme.ButtonTheme, font *font.Face, text string, c *Controller, s UISignal) *widget.Button {
 	button := widget.NewButton(
-		widget.ButtonOpts.Image(loadButtonImage()),
+		widget.ButtonOpts.Image(loadButtonImage(bt)),
 		
 		widget.ButtonOpts.Text(
 			text, 
 			*font, 
 			&widget.ButtonTextColor{
-				Idle: color.NRGBA{0xdf, 0xf4, 0xff, 0xff},
+				Idle: bt.Text,
 			},
 		),
 	
@@ -68,10 +67,10 @@ func NewButtonCluster() *widget.Container {
 	)
 }
 
-func loadButtonImage() *widget.ButtonImage {
+func loadButtonImage(bt *theme.ButtonTheme) *widget.ButtonImage {
 	return &widget.ButtonImage{
-		Idle   : image.NewNineSliceColor(color.NRGBA{0, 110, 0, 255}),
-		Hover  : image.NewNineSliceColor(color.NRGBA{0, 170, 0, 255}),
-		Pressed: image.NewNineSliceColor(color.NRGBA{0, 80, 0, 255}),
+		Idle   : image.NewNineSliceColor(bt.Idle),
+		Hover  : image.NewNineSliceColor(bt.Hover),
+		Pressed: image.NewNineSliceColor(bt.Pressed),
 	}
 }
