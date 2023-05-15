@@ -18,6 +18,8 @@ type Language struct {
 
 	// Zoom LabeledDisplay
 	Zoom       string `json:"zoom"`
+
+	Rules      string `json:"rules"`
 }
 
 /* Loads language from file. If the file does not exist, returns default language. */

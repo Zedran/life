@@ -7,5 +7,6 @@ var (
 		Generation: "Generation",
 		Speed     : "Speed",
 		Zoom      : "Zoom",
+		Rules     : "Rules",
 	}
 )

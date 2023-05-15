@@ -104,7 +104,7 @@ func NewUI(uit *theme.UITheme, lang *lang.Language, rules string) (*UI, error) {
 
 	gv, sv, zv := createInfoElements(uit, lang, &monoFont, info)
 
-	createPanelElements(uit, &font, c, rules, panel)
+	createPanelElements(uit, lang, &font, c, rules, panel)
 
 	root.AddChild(spacer)
 	root.AddChild(info)

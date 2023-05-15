@@ -26,7 +26,7 @@ func createInfoElements(theme *theme.UITheme, lang *lang.Language, font *font.Fa
 }
 
 /* Creates the elements of the info panel and adds them to it. */
-func createPanelElements(theme *theme.UITheme, font *font.Face, c *Controller, rules string, panel *widget.Container) {
+func createPanelElements(theme *theme.UITheme, lang *lang.Language, font *font.Face, c *Controller, rules string, panel *widget.Container) {
 	gameControlCluster := NewButtonCluster()
 	gameControlCluster.AddChild(NewButton(theme.PlayToggle,  font, ICON_PLAY_TOGGLE,  c, PLAY_TOGGLE ))
 	gameControlCluster.AddChild(NewButton(theme.SlowDown,    font, ICON_SLOW_DOWN,    c, SLOW_DOWN   ))
@@ -47,5 +47,5 @@ func createPanelElements(theme *theme.UITheme, font *font.Face, c *Controller, r
 	panel.AddChild(fillControlCluster)
 	panel.AddChild(jumpControlCluster)
 
-	panel.AddChild(NewTextInput(theme.Rules, font, "Rules", rules, c, NEW_RULES))
+	panel.AddChild(NewTextInput(theme.Rules, font, lang.Rules, rules, c, NEW_RULES))
 }
