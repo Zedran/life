@@ -1,6 +1,8 @@
 package config
 
 import (
+	"encoding/json"
+	"os"
 	"path/filepath"
 
 	"github.com/Zedran/life/src/config/lang"
@@ -44,7 +46,23 @@ type Config struct {
 
 /* Loads the config from file. If the file does not exist, returns default config. */
 func LoadConfig() *Config {
-	return LoadDefaultConfig()
+	root, err := GetRootDir()
+	if err != nil {
+		return LoadDefaultConfig()
+	}
+
+	var	jc jsonConfig
+
+	stream, err := os.ReadFile(filepath.Join(root, CONFIG_PATH))
+	if err != nil {
+		return LoadDefaultConfig()
+	}
+
+	if err = json.Unmarshal(stream, &jc); err != nil {
+		return LoadDefaultConfig()
+	}
+
+	return jc.ToConfig(root)
 }
 
 /* Returns the default game configuration. */
