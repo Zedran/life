@@ -69,8 +69,8 @@ func LoadConfig() *Config {
 func LoadDefaultConfig() *Config {
 	return &Config{
 		WorldSize: 720 / int(ZOOM_MIN / 2),
-		Language : lang.LoadLanguage(filepath.Join(LANG_DIR, "")),
-		Theme    : theme.LoadTheme(filepath.Join(THEME_DIR, "")),
+		Language : lang.LoadLanguage(""),
+		Theme    : theme.LoadTheme(""),
 		Window   : &Window{
 			W    : 720,
 			H    : 480,
