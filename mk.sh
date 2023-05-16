@@ -7,7 +7,7 @@ fi
 
 failed=0
 
-for package in ./src ./src/world ./src/config/theme; do
+for package in ./src ./src/world ./src/config ./src/config/theme; do
     go test $package
     
     if [ $? -ne 0 ]; then

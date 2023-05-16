@@ -22,3 +22,14 @@ func GetRootDir() (string, error) {
 
 	return filepath.Dir(exePath), nil
 }
+
+/* Verifies that the path ends with '.json' extension and appends it if not found. */
+func VerifyCfgFileExt(path string) string {
+	const configFileExt = ".json"
+
+	if filepath.Ext(path) != configFileExt {
+		return path + configFileExt
+	}
+
+	return path
+}

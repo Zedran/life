@@ -37,8 +37,8 @@ func (jc *jsonConfig) ToConfig(rootDir string) *Config {
 		n = GetDefaultWorldSize(jc.Window.W)
 	}
 	
-	lang  := lang.LoadLanguage(filepath.Join(rootDir, LANG_DIR, jc.Language))
-	theme := theme.LoadTheme(filepath.Join(rootDir, THEME_DIR, jc.Theme))
+	lang  := lang.LoadLanguage(filepath.Join(rootDir, LANG_DIR,  VerifyCfgFileExt(jc.Language)))
+	theme := theme.LoadTheme(  filepath.Join(rootDir, THEME_DIR, VerifyCfgFileExt(jc.Theme   )))
 
 	return &Config{
 		WorldSize: n,
