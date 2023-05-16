@@ -179,6 +179,7 @@ func NewGame() *Game {
 
 	ebiten.SetWindowSize(int(config.Window.W), int(config.Window.H))
 	ebiten.SetWindowTitle(config.Language.Title)
+	ebiten.SetScreenClearedEveryFrame(false)
 
 	w := world.Genesis(config.WorldSize)
 	
