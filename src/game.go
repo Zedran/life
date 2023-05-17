@@ -175,25 +175,29 @@ func (g *Game) UpdateDrawEvent() {
 
 /* Creates new game. */
 func NewGame() *Game {
-	config := config.LoadConfig()
+	cfg := config.LoadConfig()
 
-	ebiten.SetWindowSize(int(config.Window.W), int(config.Window.H))
-	ebiten.SetWindowTitle(config.Language.Title)
+	if err := config.WriteDefaults(); err != nil {
+		log.Fatal(err)
+	}
+
+	ebiten.SetWindowSize(int(cfg.Window.W), int(cfg.Window.H))
+	ebiten.SetWindowTitle(cfg.Language.Title)
 	ebiten.SetScreenClearedEveryFrame(false)
 
-	w := world.Genesis(config.WorldSize)
+	w := world.Genesis(cfg.WorldSize)
 	
-	ui, err := ui.NewUI(config.Theme.UITheme, config.Language, world.DEFAULT_RULES)
+	ui, err := ui.NewUI(cfg.Theme.UITheme, cfg.Language, world.DEFAULT_RULES)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	g := Game{
-		Config   : config,
+		Config   : cfg,
 		DragEvent: nil,
 		DrawEvent: nil,
 		GenClock : NewClock(),
-		Map      : NewMap(config.Window.W, config.Window.H, config.Theme.MapTheme, w),
+		Map      : NewMap(cfg.Window.W, cfg.Window.H, cfg.Theme.MapTheme, w),
 		UI       : ui,
 		World    : w,
 		State    : PAUSE,

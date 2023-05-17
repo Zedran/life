@@ -37,3 +37,18 @@ func LoadLanguage(path string) *Language {
 
 	return &lang
 }
+
+/* Saves the unexported default language data. */
+func SaveDefault(path string) error {
+	return SaveLanguage(&defaultLanguage, path)
+}
+
+/* Saves the JSON data structure to specified path. Errors are related to JSON data corruption or file handling. */
+func SaveLanguage(l *Language, path string) error {
+	stream, err := json.MarshalIndent(l, "", "    ")
+	if err != nil {
+		return err
+	}
+
+	return os.WriteFile(path, stream, 0644)
+}

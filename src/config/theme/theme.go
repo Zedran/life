@@ -31,12 +31,39 @@ func LoadTheme(path string) *Theme {
 	return t.ToTheme()
 }
 
-/*
-	Saves the JSON data structure at the specified path. Errors are related to JSON data corruption
-	or file handling.
-*/
-func SaveTheme(t *jsonTheme, path string) error {
-	stream, err := json.MarshalIndent(t, "", "    ")
+/* Saves the unexported default theme data. */
+func SaveDefault(path string) error {
+	pt  := defaultPanelTheme
+	lt  := defaultLabelTheme
+	bt  := defaultButtonTheme
+	tit := defaultTextInputTheme
+	
+	dt := jsonTheme{
+		Map        : defaultMapTheme,
+		InfoPanel  : pt,
+		CtrlPanel  : pt,
+		Generation : lt,
+		Speed      : lt,
+		Zoom       : lt,
+		PlayToggle : bt,
+		SlowDown   : bt,
+		SpeedUp    : bt,
+		ResetState : bt,
+		RandomState: bt,
+		FF_I       : bt,
+		FF_X       : bt,
+		FF_L       : bt,
+		FF_C       : bt,
+		FF_M       : bt,
+		Rules      : tit,
+	}
+
+	return SaveTheme(&dt, path)
+}
+
+/* Saves the JSON data structure at the specified path. Errors are related to JSON data corruption or file handling. */
+func SaveTheme(jt *jsonTheme, path string) error {
+	stream, err := json.MarshalIndent(jt, "", "    ")
 	if err != nil {
 		return err
 	}
