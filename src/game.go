@@ -207,5 +207,7 @@ func NewGame() *Game {
 	g.UI.UpdateZoomValue(g.Map.GetCurrentZoom())
 	g.UI.UpdateGenValue(0)
 
+	g.World.RandomState(5)
+
 	return &g
 }
