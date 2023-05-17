@@ -25,8 +25,8 @@ func createInfoElements(theme *theme.UITheme, lang *lang.Language, font *font.Fa
 	return gv, sv, zv
 }
 
-/* Creates the elements of the info panel and adds them to it. */
-func createPanelElements(theme *theme.UITheme, lang *lang.Language, font *font.Face, c *Controller, rules string, panel *widget.Container) {
+/* Creates the elements of the info panel and adds them to it. Returns the Rules TextInput to allow modifying its value. */
+func createPanelElements(theme *theme.UITheme, lang *lang.Language, font *font.Face, c *Controller, rules string, panel *widget.Container) *widget.TextInput {
 	gameControlCluster := NewButtonCluster()
 	gameControlCluster.AddChild(NewButton(theme.PlayToggle,  font, ICON_PLAY_TOGGLE,  c, PLAY_TOGGLE ))
 	gameControlCluster.AddChild(NewButton(theme.SlowDown,    font, ICON_SLOW_DOWN,    c, SLOW_DOWN   ))
@@ -47,5 +47,9 @@ func createPanelElements(theme *theme.UITheme, lang *lang.Language, font *font.F
 	panel.AddChild(fillControlCluster)
 	panel.AddChild(jumpControlCluster)
 
-	panel.AddChild(NewTextInput(theme.Rules, font, lang.Rules, rules, c, NEW_RULES))
+	rulesTI := NewTextInput(theme.Rules, font, lang.Rules, rules, c, NEW_RULES)
+
+	panel.AddChild(rulesTI)
+
+	return rulesTI
 }

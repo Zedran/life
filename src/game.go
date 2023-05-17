@@ -93,7 +93,12 @@ func (g *Game) HandleControllerInput(uiResp *ui.UIResponse) {
 		g.World.UpdateBy(1000)
 		g.UI.UpdateGenValue(g.World.Generation)
 	case ui.NEW_RULES:
-		g.World.Rules, _ = world.NewRules(uiResp.Rules)
+		rules, err := world.NewRules(uiResp.Rules)
+		if err != nil {
+			g.UI.SetRules(g.World.Rules.Str)
+			break
+		}
+		g.World.Rules = rules
 	}
 }
 

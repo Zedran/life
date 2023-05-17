@@ -35,6 +35,9 @@ type UI struct {
 
 	// Current speed
 	speedValue *widget.Label
+
+	// TextInput for setting the rules
+	rules      *widget.TextInput
 }
 
 /* Draws UI onto the screen. */
@@ -55,6 +58,11 @@ func (ui *UI) Clicked() bool {
 	}
 
 	return false
+}
+
+/* Sets the contents of the ui.rules. If user specifies incorrect rules, this method is called to revert to the previous ones. */
+func (ui *UI) SetRules(rules string) {
+	ui.rules.InputText = rules
 }
 
 /* Updates the UI. Returns UIResponse if widget was interacted with. */
@@ -104,7 +112,7 @@ func NewUI(uit *theme.UITheme, lang *lang.Language, rules string) (*UI, error) {
 
 	gv, sv, zv := createInfoElements(uit, lang, &monoFont, info)
 
-	createPanelElements(uit, lang, &font, c, rules, panel)
+	rulesTI    := createPanelElements(uit, lang, &font, c, rules, panel)
 
 	root.AddChild(spacer)
 	root.AddChild(info)
@@ -123,5 +131,6 @@ func NewUI(uit *theme.UITheme, lang *lang.Language, rules string) (*UI, error) {
 		genValue  : gv,
 		zoomValue : zv,
 		speedValue: sv,
+		rules     : rulesTI,
 	}, nil
 }

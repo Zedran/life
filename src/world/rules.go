@@ -22,6 +22,9 @@ type Rules struct {
 
 	// How many neighbours are required for the cell to die
 	Die  []uint8
+
+	// Original string from which rules were created
+	Str  string
 }
 
 /*
@@ -51,6 +54,8 @@ func NewRules(ruleString string) (*Rules, error) {
 	if r.Die, err = parseRuleSubstring(vals[1]); err != nil {
 		return nil, errInvalidRules
 	}
+
+	r.Str = ruleString
 
 	return &r, nil
 }
