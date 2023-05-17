@@ -48,32 +48,19 @@ type Config struct {
 func LoadConfig() *Config {
 	root, err := GetRootDir()
 	if err != nil {
-		return LoadDefaultConfig()
+		return defaultConfig.ToConfig(root)
 	}
 
 	var	jc jsonConfig
 
 	stream, err := os.ReadFile(filepath.Join(root, CONFIG_PATH))
 	if err != nil {
-		return LoadDefaultConfig()
+		return defaultConfig.ToConfig(root)
 	}
 
 	if err = json.Unmarshal(stream, &jc); err != nil {
-		return LoadDefaultConfig()
+		return defaultConfig.ToConfig(root)
 	}
 
 	return jc.ToConfig(root)
-}
-
-/* Returns the default game configuration. */
-func LoadDefaultConfig() *Config {
-	return &Config{
-		WorldSize: 720 / int(ZOOM_MIN / 2),
-		Language : lang.LoadLanguage(""),
-		Theme    : theme.LoadTheme(""),
-		Window   : &Window{
-			W    : 720,
-			H    : 480,
-		},
-	}
 }
