@@ -12,16 +12,16 @@ import (
 
 const (
 	// Top of the config file path
-	CONFIG_DIR  string  = "config"
+	CONFIG_DIR         string  = "config"
 
 	// Languages directory
-	LANG_DIR    string  = CONFIG_DIR + "/languages"
+	LANG_DIR           string  = CONFIG_DIR + "/languages"
 
 	// Theme directory
-	THEME_DIR   string  = CONFIG_DIR + "/themes"
+	THEME_DIR          string  = CONFIG_DIR + "/themes"
 
 	// Config file
-	CONFIG_PATH string  = CONFIG_DIR + "/config.json"
+	CONFIG_PATH        string  = CONFIG_DIR + "/config.json"
 
 	// Default language file
 	DEFAULT_LANG_PATH  string  = LANG_DIR + "/en.json"
@@ -30,10 +30,10 @@ const (
 	DEFAULT_THEME_PATH string  = THEME_DIR + "/default.json" 
 
 	// Minimum zoom value
-	ZOOM_MIN    float32 =  4
+	ZOOM_MIN           float32 =  4
 
 	// Maximum allowed zoom
-	ZOOM_MAX    float32 = 20
+	ZOOM_MAX           float32 = 20
 )
 
 /* Configuration of the game. */
