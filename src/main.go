@@ -13,9 +13,7 @@ var Version string
 func main() {
 	fmt.Println(Version)
 
-	g := NewGame()
-
-	if err := ebiten.RunGame(g); err != nil {
+	if err := ebiten.RunGame(NewGame()); err != nil {
 		log.Fatal(err)
 	}
 }
