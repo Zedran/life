@@ -5,7 +5,6 @@ import (
 
 	"github.com/hajimehoshi/ebiten/v2"
 
-	"github.com/Zedran/life/src/config"
 	"github.com/Zedran/life/src/config/theme"
 	"github.com/Zedran/life/src/world"
 )
@@ -211,7 +210,7 @@ func (m *Map) TruncOffSets() {
 }
 
 /* Creates new graphical map of the world. */
-func NewMap(windowWidth, windowHeight float32, theme *theme.MapTheme, world *world.World) *Map {
+func NewMap(windowWidth, windowHeight, zoomMin, zoomMax float32, theme *theme.MapTheme, world *world.World) *Map {
 	var m Map
 
 	if theme.Border == true {
@@ -229,7 +228,7 @@ func NewMap(windowWidth, windowHeight float32, theme *theme.MapTheme, world *wor
 	m.Theme      = theme
 	m.World      = world
 
-	m.ZoomSteps  = GetCommonDivisors(config.ZOOM_MIN, config.ZOOM_MAX, windowWidth, windowHeight)
+	m.ZoomSteps  = GetCommonDivisors(zoomMin, zoomMax, windowWidth, windowHeight)
 
 	maxTileSize := int(m.ZoomSteps[len(m.ZoomSteps) - 1] - m.BorderSize)
 

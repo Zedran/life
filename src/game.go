@@ -235,7 +235,7 @@ func NewGame() *Game {
 		DragEvent: nil,
 		DrawEvent: nil,
 		GenClock : NewClock(),
-		Map      : NewMap(cfg.Window.W, cfg.Window.H, cfg.Theme.MapTheme, w),
+		Map      : NewMap(cfg.Window.W, cfg.Window.H, cfg.ZoomMin, cfg.ZoomMax, cfg.Theme.MapTheme, w),
 		UI       : ui,
 		World    : w,
 		State    : PAUSE,

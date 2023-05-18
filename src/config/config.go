@@ -29,17 +29,27 @@ const (
 	// Default theme file
 	DEFAULT_THEME_PATH string  = THEME_DIR + "/default.json" 
 
-	// Minimum zoom value
-	ZOOM_MIN           float32 =  4
+	// Default minimum zoom value
+	DEFAULT_ZOOM_MIN   float32 =  4
 
-	// Maximum allowed zoom
-	ZOOM_MAX           float32 = 20
+	// Default maximum zoom value
+	DEFAULT_ZOOM_MAX   float32 = 20
+
+	// Lowest zoom value allowed
+	ZOOM_MIN_LIMIT     float32 =  1
 )
 
 /* Configuration of the game. */
 type Config struct {
 	// Number of cells in a row
 	WorldSize int
+
+	// Minimum zoom value for the map, limited to ZOOM_MIN_LIMIT
+	ZoomMin   float32
+
+	// Maximum zoom value for the map, unlimited in code, but the cap is always 
+	// the greatest common factor of Window.W and Window.H, regardless of the higher setting
+	ZoomMax   float32
 
 	// Language of the game
 	Language  *lang.Language
