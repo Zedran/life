@@ -110,6 +110,7 @@ func (jlt *jsonLabelTheme) ToTheme() *LabelTheme {
 
 /* A JSON representation of MapTheme. */
 type jsonMapTheme struct {
+	Border     bool   `json:"border"`
 	Background string `json:"background"`
 	CellAlive  string `json:"cell_alive"`
 	CellDead   string `json:"cell_dead"`
@@ -130,6 +131,7 @@ func (jmt *jsonMapTheme) ToTheme() *MapTheme {
 	}
 
 	return &MapTheme{
+		Border    : jmt.Border,
 		Background: vals[0],
 		CellAlive : vals[1],
 		CellDead  : vals[2],

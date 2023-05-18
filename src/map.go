@@ -29,6 +29,9 @@ type Map struct {
 	// to fit the grid at current zoom level
 	CellScale  float64
 
+	// Can either be equal to 0 or BORDER_SIZE
+	BorderSize float32
+
 	// Number of cells displayed in one row
 	RowLength  float32
 
@@ -198,7 +201,7 @@ func (m *Map) Pan(dX, dY int) {
 
 /* Recalculates the fraction of maximum cell size by which Map.AliveImg and Map.DeadImg are scaled. */
 func (m *Map) RecalculateCellScale() {
-	m.CellScale = float64((m.GetCurrentZoom() - BORDER_SIZE) / float32(m.AliveImg.Bounds().Dx()))
+	m.CellScale = float64((m.GetCurrentZoom() - m.BorderSize) / float32(m.AliveImg.Bounds().Dx()))
 }
 
 /* Called after Game.DragEvent finishes its job to eliminate Map.OffSetX and Map.OffSetY inaccuracies. */
@@ -211,6 +214,12 @@ func (m *Map) TruncOffSets() {
 func NewMap(windowWidth, windowHeight float32, theme *theme.MapTheme, world *world.World) *Map {
 	var m Map
 
+	if theme.Border == true {
+		m.BorderSize = BORDER_SIZE
+	} else {
+		m.BorderSize = 0
+	}
+
 	m.WindowW    = windowWidth
 	m.WindowH    = windowHeight
 
@@ -222,7 +231,7 @@ func NewMap(windowWidth, windowHeight float32, theme *theme.MapTheme, world *wor
 
 	m.ZoomSteps  = GetCommonDivisors(config.ZOOM_MIN, config.ZOOM_MAX, windowWidth, windowHeight)
 
-	maxTileSize := int(m.ZoomSteps[len(m.ZoomSteps) - 1] - BORDER_SIZE)
+	maxTileSize := int(m.ZoomSteps[len(m.ZoomSteps) - 1] - m.BorderSize)
 
 	m.Background = ebiten.NewImage(int(windowWidth), int(windowHeight))
 	

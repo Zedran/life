@@ -13,6 +13,7 @@ var (
 	}
 
 	defaultMapTheme = jsonMapTheme{
+		Border    : true,
 		Background: "#5f4d32ff",
 		CellAlive : "#000000ff",
 		CellDead  : "#fff8f2ff",
