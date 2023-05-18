@@ -74,30 +74,27 @@ func (w *World) Update() {
 
 	w.Generation++
 
-	var (
-		rowLen = int(w.Size)
-		buffer = w.bp.GetCurrentBuffer()
-	)
+	buffer := w.bp.GetCurrentBuffer()
 
 	w.wg.Add(1 + w.Size - PADDING * 2)
 
 	go w.bp.ClearSpareBuffer(w.wg)
 
-	for y := rowLen * PADDING; y < len(w.Cells) - rowLen * PADDING; y += rowLen  {
+	for y := w.Size * PADDING; y < len(w.Cells) - w.Size * PADDING; y += w.Size  {
 		
 		go func(rowStart int) {
 
-			for i := rowStart + PADDING; i < rowStart + rowLen - PADDING; i++ {
+			for i := rowStart + PADDING; i < rowStart + w.Size - PADDING; i++ {
 				// Neighbour count
 				nc := 
-					w.Cells[i - 1 - rowLen] + 
-					w.Cells[i     - rowLen] + 
-					w.Cells[i + 1 - rowLen] + 
+					w.Cells[i - 1 - w.Size] + 
+					w.Cells[i     - w.Size] + 
+					w.Cells[i + 1 - w.Size] + 
 					w.Cells[i - 1         ] + 
 					w.Cells[i + 1         ] + 
-					w.Cells[i - 1 + rowLen] + 
-					w.Cells[i     + rowLen] + 
-					w.Cells[i + 1 + rowLen]
+					w.Cells[i - 1 + w.Size] + 
+					w.Cells[i     + w.Size] + 
+					w.Cells[i + 1 + w.Size]
 
 				switch w.Cells[i] {
 				case ALIVE:
