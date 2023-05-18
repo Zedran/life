@@ -5,6 +5,7 @@ import (
 
 	"github.com/hajimehoshi/ebiten/v2"
 
+	"github.com/Zedran/life/src/config"
 	"github.com/Zedran/life/src/config/theme"
 	"github.com/Zedran/life/src/world"
 )
@@ -210,29 +211,29 @@ func (m *Map) TruncOffSets() {
 }
 
 /* Creates new graphical map of the world. */
-func NewMap(windowWidth, windowHeight, zoomMin, zoomMax float32, theme *theme.MapTheme, world *world.World) *Map {
+func NewMap(cfg *config.Config, world *world.World) *Map {
 	var m Map
 
-	if theme.Border == true {
+	if cfg.Theme.MapTheme.Border == true {
 		m.BorderSize = BORDER_SIZE
 	} else {
 		m.BorderSize = 0
 	}
 
-	m.WindowW    = windowWidth
-	m.WindowH    = windowHeight
+	m.WindowW    = cfg.Window.W
+	m.WindowH    = cfg.Window.H
 
 	m.OffSetX    = 0
 	m.OffSetY    = 0
 
-	m.Theme      = theme
+	m.Theme      = cfg.Theme.MapTheme
 	m.World      = world
 
-	m.ZoomSteps  = GetCommonDivisors(zoomMin, zoomMax, windowWidth, windowHeight)
+	m.ZoomSteps  = GetCommonDivisors(cfg.ZoomMin, cfg.ZoomMax, cfg.Window.W, cfg.Window.H)
 
 	maxTileSize := int(m.ZoomSteps[len(m.ZoomSteps) - 1] - m.BorderSize)
 
-	m.Background = ebiten.NewImage(int(windowWidth), int(windowHeight))
+	m.Background = ebiten.NewImage(int(cfg.Window.W), int(cfg.Window.H))
 	
 	m.AliveImg   = ebiten.NewImage(maxTileSize, maxTileSize)
 	m.DeadImg    = ebiten.NewImage(maxTileSize, maxTileSize)
