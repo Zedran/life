@@ -34,6 +34,9 @@ type Game struct {
 	// Game logic
 	World     *world.World
 
+	// Sentinel channel used for stopping long tasks
+	Sentinel  chan bool
+
 	// Indicates whether the game is currently running
 	State     GameState
 }
@@ -71,10 +74,12 @@ func (g *Game) HandleControllerInput(uiResp *ui.UIResponse) {
 		g.GenClock.AdjustSpeed(1)
 		g.UI.UpdateSpeedValue(g.GenClock.GetEventsPerSec())
 	case ui.RESET_STATE:
+		g.StopTask()
 		g.World.Reset()
 		g.State = PAUSE
 		g.UI.UpdateGenValue(g.World.Generation)
 	case ui.RANDOM_STATE:
+		g.StopTask()
 		g.World.RandomState(5)
 		g.State = PAUSE
 		g.UI.UpdateGenValue(g.World.Generation)
@@ -115,7 +120,7 @@ func (g *Game) Jump(generations int) {
 
 	g.State = JUMP
 
-	g.World.UpdateBy(generations)
+	g.World.UpdateBy(&g.Sentinel, generations)
 
 	g.UI.UpdateGenValue(g.World.Generation)
 	g.State = prevState
@@ -123,6 +128,13 @@ func (g *Game) Jump(generations int) {
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
 	return int(g.Config.Window.W), int(g.Config.Window.H)
+}
+
+/* Stops currently running long task. Currently, it is only used to stop jump tasks. */
+func (g *Game) StopTask() {
+	if g.State == JUMP {
+		g.Sentinel <- true
+	}
 }
 
 /* Updates the game every tick. */
@@ -227,6 +239,7 @@ func NewGame() *Game {
 		UI       : ui,
 		World    : w,
 		State    : PAUSE,
+		Sentinel : make(chan bool),
 	}
 
 	g.UI.UpdateSpeedValue(g.GenClock.GetEventsPerSec())

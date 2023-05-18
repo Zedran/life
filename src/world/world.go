@@ -125,10 +125,15 @@ func (w *World) Update() {
 	w.Working = false
 }
 
-/* Progress the World by n generations. */
-func (w *World) UpdateBy(n int) {
+/* Progresses the World by n generations. If stop signal is received from the channel, jump task is dropped. */
+func (w *World) UpdateBy(stop *chan bool, n int) {
 	for i := 0; i < n; i++ {
-		w.Update()
+		select {
+		case <- *stop:
+			return
+		default:
+			w.Update()
+		}
 	}
 }
 
