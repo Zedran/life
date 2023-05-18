@@ -31,6 +31,9 @@ type World struct {
 
 	// WaitGroup for World.Update method
 	wg         *sync.WaitGroup
+
+	// Indicates whether the World is currently updating (World.wg waits)
+	Working    bool
 }
 
 /*
@@ -67,6 +70,8 @@ func (w *World) Reset() {
 
 /* Makes the world transition to next generation, updating the cell array. */
 func (w *World) Update() {
+	w.Working = true
+
 	w.Generation++
 
 	var (
@@ -119,6 +124,8 @@ func (w *World) Update() {
 	w.bp.NextState()
 
 	w.Cells = w.bp.GetCurrentState()
+	
+	w.Working = false
 }
 
 /* Progress the World by n generations. */
@@ -141,5 +148,6 @@ func Genesis(worldSize int) *World {
 		Cells     : cells,
 		Rules     : rules,
 		wg        : &sync.WaitGroup{},
+		Working   : false,
 	}
 }

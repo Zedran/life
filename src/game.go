@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"time"
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/inpututil"
@@ -78,20 +79,15 @@ func (g *Game) HandleControllerInput(uiResp *ui.UIResponse) {
 		g.State = PAUSE
 		g.UI.UpdateGenValue(g.World.Generation)
 	case ui.FF_I:
-		g.World.Update()
-		g.UI.UpdateGenValue(g.World.Generation)
+		go g.Jump(1)
 	case ui.FF_X:
-		g.World.UpdateBy(10)
-		g.UI.UpdateGenValue(g.World.Generation)
+		go g.Jump(10)
 	case ui.FF_L:
-		g.World.UpdateBy(50)
-		g.UI.UpdateGenValue(g.World.Generation)
+		go g.Jump(50)
 	case ui.FF_C:
-		g.World.UpdateBy(100)
-		g.UI.UpdateGenValue(g.World.Generation)
+		go g.Jump(100)
 	case ui.FF_M:
-		g.World.UpdateBy(1000)
-		g.UI.UpdateGenValue(g.World.Generation)
+		go g.Jump(1000)
 	case ui.NEW_RULES:
 		rules, err := world.NewRules(uiResp.Rules)
 		if err != nil {
@@ -100,6 +96,29 @@ func (g *Game) HandleControllerInput(uiResp *ui.UIResponse) {
 		}
 		g.World.Rules = rules
 	}
+}
+
+/* Performs a jump by specified number of generations. */
+func (g *Game) Jump(generations int) {
+	if g.State == JUMP {
+		return
+	}
+
+	prevState := g.State
+
+	g.State = PAUSE
+
+	for g.World.Working {
+		// Hold while World.wg finishes its Wait
+		time.Sleep(time.Microsecond)
+	}
+
+	g.State = JUMP
+
+	g.World.UpdateBy(generations)
+
+	g.UI.UpdateGenValue(g.World.Generation)
+	g.State = prevState
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
@@ -140,6 +159,8 @@ func (g *Game) Update() error {
 
 	if g.State == RUN && g.GenClock.Tick() == TRIGGER {
 		g.World.Update()
+		g.UI.UpdateGenValue(g.World.Generation)
+	} else if g.State == JUMP {
 		g.UI.UpdateGenValue(g.World.Generation)
 	}
 
