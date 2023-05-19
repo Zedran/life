@@ -27,7 +27,7 @@ type jsonConfig struct {
 
 	WorldSize cannot be less than half of the Window's pixel width. If "auto" keyword is specified 
 	or if the WorldSize does not meet the above requirements, it is set to default 
-	(a cell count equal to a half of Window.W [px].)
+	(a cell count equal to half of Window.W or Window.H [px] - whichever is greater).
 
 	If language file does not exist or its structure is invalid, a default one is loaded.
 
@@ -51,8 +51,8 @@ func (jc *jsonConfig) ToConfig(rootDir string) *Config {
 
 	n, err := strconv.Atoi(jc.WorldSize)
 
-	if err != nil || jc.WorldSize == "auto" || n < GetDefaultWorldSize(jc.Window.W, jc.ZoomMin) {
-		n = GetDefaultWorldSize(jc.Window.W, jc.ZoomMin)
+	if err != nil || jc.WorldSize == "auto" || n < GetDefaultWorldSize(&jc.Window, jc.ZoomMin) {
+		n = GetDefaultWorldSize(&jc.Window, jc.ZoomMin)
 	}
 	
 	lang  := lang.LoadLanguage(filepath.Join(rootDir, LANG_DIR,  VerifyCfgFileExt(jc.Language)))
