@@ -66,6 +66,8 @@ func (g *Game) HandleControllerInput(uiResp *ui.UIResponse) {
 			g.State = PAUSE
 		} else if g.State == PAUSE {
 			g.State = RUN
+		} else {
+			g.StopTask()
 		}
 	case ui.SLOW_DOWN:
 		g.GenClock.AdjustSpeed(-1)
@@ -123,7 +125,12 @@ func (g *Game) Jump(generations int) {
 	g.World.UpdateBy(&g.Sentinel, generations)
 
 	g.UI.UpdateGenValue(g.World.Generation)
-	g.State = prevState
+
+	if prevState == RUN {
+		g.State = PAUSE
+	} else {
+		g.State = prevState
+	}
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
