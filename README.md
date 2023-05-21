@@ -4,6 +4,10 @@
 
 This is a hobby project focused on exploration of the [Game of Life](https://en.wikipedia.org/wiki/Conway's_Game_of_Life). It is written in Go and utilizes [ebitengine](https://ebitengine.org/) as frontend.
 
+## Installation
+
+The application needs to be compiled from source code. This process requires [Go compiler](https://go.dev/) version 1.19 or later. I have provided scripts for convenience: `mk.sh` for Linux and `mk.bat` for Windows. Simply download code or clone repository and run the script designed for your operating system.
+
 ## Configuration
 
 ### Config directory structure
