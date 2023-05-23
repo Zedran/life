@@ -10,6 +10,6 @@ const (
 	// The game is paused (world.World is not progressing)
 	PAUSE
 
-	// Skipping time is in progress
-	JUMP
+	// Game.FastForward is in progress
+	FF
 )

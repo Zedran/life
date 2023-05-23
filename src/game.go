@@ -54,6 +54,34 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	g.UI.Draw(screen)
 }
 
+/* Performs a jump in time by specified number of generations. */
+func (g *Game) FastForward(generations int) {
+	if g.State == FF {
+		return
+	}
+
+	prevState := g.State
+
+	g.State = PAUSE
+
+	for g.World.Working {
+		// Hold while World.wg finishes its Wait
+		time.Sleep(time.Microsecond)
+	}
+
+	g.State = FF
+
+	g.World.UpdateBy(&g.Sentinel, generations)
+
+	g.UI.UpdateGenValue(g.World.Generation)
+
+	if prevState == RUN {
+		g.State = PAUSE
+	} else {
+		g.State = prevState
+	}
+}
+
 /* Handles the input from g.UI. */
 func (g *Game) HandleControllerInput(uiResp *ui.UIResponse) {
 	if uiResp == nil {
@@ -86,15 +114,15 @@ func (g *Game) HandleControllerInput(uiResp *ui.UIResponse) {
 		g.State = PAUSE
 		g.UI.UpdateGenValue(g.World.Generation)
 	case ui.FF_I:
-		go g.Jump(1)
+		go g.FastForward(1)
 	case ui.FF_X:
-		go g.Jump(10)
+		go g.FastForward(10)
 	case ui.FF_L:
-		go g.Jump(50)
+		go g.FastForward(50)
 	case ui.FF_C:
-		go g.Jump(100)
+		go g.FastForward(100)
 	case ui.FF_M:
-		go g.Jump(1000)
+		go g.FastForward(1000)
 	case ui.NEW_RULES:
 		rules, err := world.NewRules(uiResp.Rules)
 		if err != nil {
@@ -105,41 +133,13 @@ func (g *Game) HandleControllerInput(uiResp *ui.UIResponse) {
 	}
 }
 
-/* Performs a jump by specified number of generations. */
-func (g *Game) Jump(generations int) {
-	if g.State == JUMP {
-		return
-	}
-
-	prevState := g.State
-
-	g.State = PAUSE
-
-	for g.World.Working {
-		// Hold while World.wg finishes its Wait
-		time.Sleep(time.Microsecond)
-	}
-
-	g.State = JUMP
-
-	g.World.UpdateBy(&g.Sentinel, generations)
-
-	g.UI.UpdateGenValue(g.World.Generation)
-
-	if prevState == RUN {
-		g.State = PAUSE
-	} else {
-		g.State = prevState
-	}
-}
-
 func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
 	return int(g.Config.Window.W), int(g.Config.Window.H)
 }
 
-/* Stops currently running long task. Currently, it is only used to stop jump tasks. */
+/* Stops currently running long task. Currently, it is only used to stop Game.FastForward. */
 func (g *Game) StopTask() {
-	if g.State == JUMP {
+	if g.State == FF {
 		g.Sentinel <- true
 	}
 }
@@ -179,7 +179,7 @@ func (g *Game) Update() error {
 	if g.State == RUN && g.GenClock.Tick() == TRIGGER {
 		g.World.Update()
 		g.UI.UpdateGenValue(g.World.Generation)
-	} else if g.State == JUMP {
+	} else if g.State == FF {
 		g.UI.UpdateGenValue(g.World.Generation)
 	}
 
