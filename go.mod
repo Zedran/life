@@ -6,7 +6,7 @@ require (
 	github.com/ebitenui/ebitenui v0.5.0
 	github.com/goki/freetype v1.0.1
 	github.com/hajimehoshi/ebiten/v2 v2.5.1
-	golang.org/x/image v0.6.0
+	golang.org/x/image v0.13.0
 )
 
 require (
