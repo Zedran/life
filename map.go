@@ -5,9 +5,9 @@ import (
 
 	"github.com/hajimehoshi/ebiten/v2"
 
-	"github.com/Zedran/life/src/config"
-	"github.com/Zedran/life/src/config/theme"
-	"github.com/Zedran/life/src/world"
+	"github.com/Zedran/life/internal/config"
+	"github.com/Zedran/life/internal/config/theme"
+	"github.com/Zedran/life/internal/world"
 )
 
 // Size of the border between cells [px]

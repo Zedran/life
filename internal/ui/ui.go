@@ -3,8 +3,8 @@ package ui
 import (
 	"fmt"
 
-	"github.com/Zedran/life/src/config/lang"
-	"github.com/Zedran/life/src/config/theme"
+	"github.com/Zedran/life/internal/config/lang"
+	"github.com/Zedran/life/internal/config/theme"
 	"github.com/ebitenui/ebitenui"
 	"github.com/ebitenui/ebitenui/widget"
 	"github.com/hajimehoshi/ebiten/v2"

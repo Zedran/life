@@ -4,8 +4,8 @@ import (
 	"path/filepath"
 	"strconv"
 
-	"github.com/Zedran/life/src/config/lang"
-	"github.com/Zedran/life/src/config/theme"
+	"github.com/Zedran/life/internal/config/lang"
+	"github.com/Zedran/life/internal/config/theme"
 )
 
 /* A JSON representation of Config. */

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/Zedran/life/src/world"
+	"github.com/Zedran/life/internal/world"
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/inpututil"
 )

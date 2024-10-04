@@ -7,9 +7,9 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/inpututil"
 
-	"github.com/Zedran/life/src/config"
-	"github.com/Zedran/life/src/ui"
-	"github.com/Zedran/life/src/world"
+	"github.com/Zedran/life/internal/config"
+	"github.com/Zedran/life/internal/ui"
+	"github.com/Zedran/life/internal/world"
 )
 
 /* Represents the general structure of the game. */

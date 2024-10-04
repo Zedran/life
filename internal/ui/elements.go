@@ -1,8 +1,8 @@
 package ui
 
 import (
-	"github.com/Zedran/life/src/config/lang"
-	"github.com/Zedran/life/src/config/theme"
+	"github.com/Zedran/life/internal/config/lang"
+	"github.com/Zedran/life/internal/config/theme"
 	"github.com/ebitenui/ebitenui/widget"
 	"golang.org/x/image/font"
 )
