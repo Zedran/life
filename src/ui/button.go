@@ -11,15 +11,15 @@ import (
 func NewButton(bt *theme.ButtonTheme, font *font.Face, text string, c *Controller, s UISignal) *widget.Button {
 	button := widget.NewButton(
 		widget.ButtonOpts.Image(loadButtonImage(bt)),
-		
+
 		widget.ButtonOpts.Text(
-			text, 
-			*font, 
+			text,
+			*font,
 			&widget.ButtonTextColor{
 				Idle: bt.Text,
 			},
 		),
-	
+
 		widget.ButtonOpts.TextPadding(
 			widget.Insets{
 				Left:   10,
@@ -69,8 +69,8 @@ func NewButtonCluster() *widget.Container {
 
 func loadButtonImage(bt *theme.ButtonTheme) *widget.ButtonImage {
 	return &widget.ButtonImage{
-		Idle   : image.NewNineSliceColor(bt.Idle),
-		Hover  : image.NewNineSliceColor(bt.Hover),
+		Idle:    image.NewNineSliceColor(bt.Idle),
+		Hover:   image.NewNineSliceColor(bt.Hover),
 		Pressed: image.NewNineSliceColor(bt.Pressed),
 	}
 }

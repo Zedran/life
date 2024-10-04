@@ -4,6 +4,6 @@ package world
 type State uint8
 
 const (
-	DEAD  = State(iota)
+	DEAD = State(iota)
 	ALIVE
 )

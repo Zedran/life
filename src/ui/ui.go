@@ -16,28 +16,28 @@ type UI struct {
 	controller *Controller
 
 	// UI struct provided by ebitenui
-	ui         *ebitenui.UI
+	ui *ebitenui.UI
 
 	// Root container of the UI
-	root       *widget.Container
+	root *widget.Container
 
 	// Info panel
-	info       *widget.Container
+	info *widget.Container
 
 	// Control panel
-	panel      *widget.Container
+	panel *widget.Container
 
 	// Generation
-	genValue   *widget.Label
+	genValue *widget.Label
 
 	// Current zoom
-	zoomValue  *widget.Label
+	zoomValue *widget.Label
 
 	// Current speed
 	speedValue *widget.Label
 
 	// TextInput for setting the rules
-	rules      *widget.TextInput
+	rules *widget.TextInput
 }
 
 /* Draws UI onto the screen. */
@@ -48,10 +48,10 @@ func (ui *UI) Draw(screen *ebiten.Image) {
 /* Called on click. Returns true if a mouse cursor is inside one of the panels. */
 func (ui *UI) Clicked() bool {
 	x, y := ebiten.CursorPosition()
-	
+
 	for _, c := range []*widget.Container{ui.info, ui.panel} {
 		r := c.GetWidget().Rect
-		
+
 		if (x >= r.Min.X && x <= r.Max.X) && (y >= r.Min.Y && y <= r.Max.Y) {
 			return true
 		}
@@ -93,10 +93,10 @@ func (ui *UI) UpdateZoomValue(new float32) {
 
 /* Creates UI elements: containers, widgets and the corresponding Controller. */
 func NewUI(uit *theme.UITheme, lang *lang.Language, rules string) (*UI, error) {
-	root   := createRoot()
+	root := createRoot()
 	spacer := createSpacer()
-	info   := createInfo(uit)
-	panel  := createPanel(uit)
+	info := createInfo(uit)
+	panel := createPanel(uit)
 
 	font, err := loadFont(15)
 	if err != nil {
@@ -112,7 +112,7 @@ func NewUI(uit *theme.UITheme, lang *lang.Language, rules string) (*UI, error) {
 
 	gv, sv, zv := createInfoElements(uit, lang, &monoFont, info)
 
-	rulesTI    := createPanelElements(uit, lang, &font, c, rules, panel)
+	rulesTI := createPanelElements(uit, lang, &font, c, rules, panel)
 
 	root.AddChild(spacer)
 	root.AddChild(info)
@@ -124,13 +124,13 @@ func NewUI(uit *theme.UITheme, lang *lang.Language, rules string) (*UI, error) {
 
 	return &UI{
 		controller: c,
-		ui        : &eui,
-		root      : root,
-		info      : info,
-		panel     : panel,
-		genValue  : gv,
-		zoomValue : zv,
+		ui:         &eui,
+		root:       root,
+		info:       info,
+		panel:      panel,
+		genValue:   gv,
+		zoomValue:  zv,
 		speedValue: sv,
-		rules     : rulesTI,
+		rules:      rulesTI,
 	}, nil
 }

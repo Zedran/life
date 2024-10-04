@@ -6,55 +6,55 @@ import (
 
 /* A JSON representation of Theme. */
 type jsonTheme struct {
-	Map         jsonMapTheme       `json:"map"`
+	Map jsonMapTheme `json:"map"`
 
-	InfoPanel   jsonPanelTheme     `json:"info_panel"`
-	CtrlPanel   jsonPanelTheme     `json:"ctrl_panel"`
+	InfoPanel jsonPanelTheme `json:"info_panel"`
+	CtrlPanel jsonPanelTheme `json:"ctrl_panel"`
 
-	Generation  jsonLabelTheme     `json:"generation"`
-	Speed       jsonLabelTheme     `json:"speed"`
-	Zoom        jsonLabelTheme     `json:"zoom"`
+	Generation jsonLabelTheme `json:"generation"`
+	Speed      jsonLabelTheme `json:"speed"`
+	Zoom       jsonLabelTheme `json:"zoom"`
 
-	PlayToggle  jsonButtonTheme    `json:"play_toggle"`
-	SlowDown    jsonButtonTheme    `json:"slow_down"`
-	SpeedUp     jsonButtonTheme    `json:"speed_up"`
+	PlayToggle jsonButtonTheme `json:"play_toggle"`
+	SlowDown   jsonButtonTheme `json:"slow_down"`
+	SpeedUp    jsonButtonTheme `json:"speed_up"`
 
-	ResetState  jsonButtonTheme    `json:"reset_state"`
-	RandomState jsonButtonTheme    `json:"random_state"`
+	ResetState  jsonButtonTheme `json:"reset_state"`
+	RandomState jsonButtonTheme `json:"random_state"`
 
-	FF_I        jsonButtonTheme    `json:"ff_1"`
-	FF_X        jsonButtonTheme    `json:"ff_10"`
-	FF_L        jsonButtonTheme    `json:"ff_50"`
-	FF_C        jsonButtonTheme    `json:"ff_100"`
-	FF_M        jsonButtonTheme    `json:"ff_1000"`
+	FF_I jsonButtonTheme `json:"ff_1"`
+	FF_X jsonButtonTheme `json:"ff_10"`
+	FF_L jsonButtonTheme `json:"ff_50"`
+	FF_C jsonButtonTheme `json:"ff_100"`
+	FF_M jsonButtonTheme `json:"ff_1000"`
 
-	Rules       jsonTextInputTheme `json:"rules"`
+	Rules jsonTextInputTheme `json:"rules"`
 }
 
 /*
-	Converts JSON struct into Theme. If data structure of any of the elements is invalid, 
-	it is replaced with a default configuration.
+Converts JSON struct into Theme. If data structure of any of the elements is invalid,
+it is replaced with a default configuration.
 */
 func (t *jsonTheme) ToTheme() *Theme {
 	return &Theme{
 		MapTheme: t.Map.ToTheme(),
-		UITheme : &UITheme{
-			InfoPanel  : t.InfoPanel.ToTheme(),
-			CtrlPanel  : t.CtrlPanel.ToTheme(),
-			Generation : t.Generation.ToTheme(),
-			Speed      : t.Speed.ToTheme(),
-			Zoom       : t.Zoom.ToTheme(),
-			PlayToggle : t.PlayToggle.ToTheme(),
-			SlowDown   : t.SlowDown.ToTheme(),
-			SpeedUp    : t.SpeedUp.ToTheme(),
-			ResetState : t.ResetState.ToTheme(),
+		UITheme: &UITheme{
+			InfoPanel:   t.InfoPanel.ToTheme(),
+			CtrlPanel:   t.CtrlPanel.ToTheme(),
+			Generation:  t.Generation.ToTheme(),
+			Speed:       t.Speed.ToTheme(),
+			Zoom:        t.Zoom.ToTheme(),
+			PlayToggle:  t.PlayToggle.ToTheme(),
+			SlowDown:    t.SlowDown.ToTheme(),
+			SpeedUp:     t.SpeedUp.ToTheme(),
+			ResetState:  t.ResetState.ToTheme(),
 			RandomState: t.RandomState.ToTheme(),
-			FF_I       : t.FF_I.ToTheme(),
-			FF_X       : t.FF_X.ToTheme(),
-			FF_L       : t.FF_L.ToTheme(),
-			FF_C       : t.FF_C.ToTheme(),
-			FF_M       : t.FF_M.ToTheme(),
-			Rules      : t.Rules.ToTheme(),
+			FF_I:        t.FF_I.ToTheme(),
+			FF_X:        t.FF_X.ToTheme(),
+			FF_L:        t.FF_L.ToTheme(),
+			FF_C:        t.FF_C.ToTheme(),
+			FF_M:        t.FF_M.ToTheme(),
+			Rules:       t.Rules.ToTheme(),
 		},
 	}
 }
@@ -120,7 +120,7 @@ type jsonMapTheme struct {
 func (jmt *jsonMapTheme) ToTheme() *MapTheme {
 	var (
 		vals = make([]*color.RGBA, 3)
-		err error
+		err  error
 	)
 
 	for i, v := range []string{jmt.Background, jmt.CellAlive, jmt.CellDead} {
@@ -131,10 +131,10 @@ func (jmt *jsonMapTheme) ToTheme() *MapTheme {
 	}
 
 	return &MapTheme{
-		Border    : jmt.Border,
+		Border:     jmt.Border,
 		Background: vals[0],
-		CellAlive : vals[1],
-		CellDead  : vals[2],
+		CellAlive:  vals[1],
+		CellDead:   vals[2],
 	}
 }
 
@@ -168,7 +168,7 @@ type jsonTextInputTheme struct {
 func (jtit *jsonTextInputTheme) ToTheme() *TextInputTheme {
 	var (
 		vals = make([]*color.RGBA, 5)
-		err error
+		err  error
 	)
 
 	for i, v := range []string{jtit.Text, jtit.Idle, jtit.Disabled, jtit.Caret, jtit.DisabledCaret} {
@@ -179,10 +179,10 @@ func (jtit *jsonTextInputTheme) ToTheme() *TextInputTheme {
 	}
 
 	return &TextInputTheme{
-		Text         : vals[0],
-		Idle         : vals[1],
-		Disabled     : vals[2],
-		Caret        : vals[3],
+		Text:          vals[0],
+		Idle:          vals[1],
+		Disabled:      vals[2],
+		Caret:         vals[3],
 		DisabledCaret: vals[4],
 	}
 }

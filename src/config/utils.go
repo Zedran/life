@@ -6,9 +6,9 @@ import (
 )
 
 /*
-	Returns the default world size. The default size is twice the amount of cells that fits into greater window dimension
-	at minimum zoom level. In other words, the length of Map's side (Map.Size - cell count) equals to half of the Window.W
-	or Window.H [px] - whichever is greater.
+Returns the default world size. The default size is twice the amount of cells that fits into greater window dimension
+at minimum zoom level. In other words, the length of Map's side (Map.Size - cell count) equals to half of the Window.W
+or Window.H [px] - whichever is greater.
 */
 func GetDefaultWorldSize(w *Window, zoomMin float32) int {
 	var dim float32

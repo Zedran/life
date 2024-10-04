@@ -13,7 +13,7 @@ func GetClosestToMean(s []float32) float32 {
 	closest := s[0]
 
 	for i := range s[1:] {
-		if math.Abs(float64(s[i] - mean)) < math.Abs(float64(closest - mean)) {
+		if math.Abs(float64(s[i]-mean)) < math.Abs(float64(closest-mean)) {
 			closest = s[i]
 		}
 	}
@@ -25,17 +25,17 @@ func GetClosestToMean(s []float32) float32 {
 func GetCommonDivisors(min, max float32, nums ...float32) []float32 {
 	divs := make([]float32, 0)
 
-	Outer:
-		for d := min; d <= max; d++ {
-			
-			for _, n := range nums {
-				if math.Mod(float64(n), float64(d)) != 0 {
-					continue Outer
-				}
-			}
+Outer:
+	for d := min; d <= max; d++ {
 
-			divs = append(divs, d)
+		for _, n := range nums {
+			if math.Mod(float64(n), float64(d)) != 0 {
+				continue Outer
+			}
 		}
+
+		divs = append(divs, d)
+	}
 
 	return divs
 }

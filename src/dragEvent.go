@@ -11,7 +11,7 @@ type DragEvent struct {
 	Active bool
 
 	// Current cursor coordinates
-	CurX,  CurY  int
+	CurX, CurY int
 
 	// Cursor coordinates before dragging
 	InitX, InitY int
@@ -52,9 +52,9 @@ func NewDragEvent() *DragEvent {
 
 	return &DragEvent{
 		Active: true,
-		CurX  : x,
-		CurY  : y,
-		InitX : x,
-		InitY : y,
+		CurX:   x,
+		CurY:   y,
+		InitX:  x,
+		InitY:  y,
 	}
 }

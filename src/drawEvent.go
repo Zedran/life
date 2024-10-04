@@ -7,10 +7,10 @@ import (
 )
 
 /*
-	DrawEvent handles the LMB press on the Map. It allows the user to change the state
-	of the cell. If the cursor moves while LMB is pressed, all cells in its path are
-	set to the state opposite to this of a cell originally pressed. This allows the user
-	to "draw" and "erase" life.
+DrawEvent handles the LMB press on the Map. It allows the user to change the state
+of the cell. If the cursor moves while LMB is pressed, all cells in its path are
+set to the state opposite to this of a cell originally pressed. This allows the user
+to "draw" and "erase" life.
 */
 type DrawEvent struct {
 	// True indicates that the user is currently drawing world.State on the Map
@@ -19,7 +19,7 @@ type DrawEvent struct {
 	// The world.State value that is drawn. Depends on the state of the first cell that was clicked on.
 	// If the first cell is alive, all cells in cursor's path are set to world.DEAD.
 	// If the first cell is dead, all cells in cursor's path are set to world.ALIVE.
-	Draws  world.State
+	Draws world.State
 
 	// Current cursor coordinates
 	CurX, CurY int
@@ -52,7 +52,7 @@ func NewDrawEvent(m *Map) *DrawEvent {
 
 	var s world.State
 
-	switch m.World.Cells[my * m.World.Size + mx] {
+	switch m.World.Cells[my*m.World.Size+mx] {
 	case world.ALIVE:
 		s = world.DEAD
 	case world.DEAD:
@@ -61,8 +61,8 @@ func NewDrawEvent(m *Map) *DrawEvent {
 
 	return &DrawEvent{
 		Active: true,
-		Draws : s,
-		CurX  : x,
-		CurY  : y,
+		Draws:  s,
+		CurX:   x,
+		CurY:   y,
 	}
 }

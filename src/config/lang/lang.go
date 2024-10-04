@@ -8,18 +8,18 @@ import (
 /* Language of the game. */
 type Language struct {
 	// Window title
-	Title      string `json:"title"`
+	Title string `json:"title"`
 
 	// Generation LabeledDisplay
 	Generation string `json:"generation"`
 
 	// Speed LabeledDisplay
-	Speed      string `json:"speed"`
+	Speed string `json:"speed"`
 
 	// Zoom LabeledDisplay
-	Zoom       string `json:"zoom"`
+	Zoom string `json:"zoom"`
 
-	Rules      string `json:"rules"`
+	Rules string `json:"rules"`
 }
 
 /* Loads language from file. If the file does not exist, returns default language. */

@@ -1,21 +1,21 @@
 package ui
 
 /*
-	Signal received by Controller. Each signal corresponds with specific widget
-	and allows the Game to determine in what way its state should be modified.
+Signal received by Controller. Each signal corresponds with specific widget
+and allows the Game to determine in what way its state should be modified.
 */
 type UISignal uint8
 
 const (
 	// No signal is currently stored (UI was not interacted with)
-	NONE         UISignal = iota
+	NONE UISignal = iota
 
 	// Toggle Play / Pause
 	PLAY_TOGGLE
 
 	// Decrease speed
 	SLOW_DOWN
-	
+
 	// Increase speed
 	SPEED_UP
 

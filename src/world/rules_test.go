@@ -13,12 +13,12 @@ func TestNewRules(t *testing.T) {
 	}
 
 	goodCases := map[string]Rules{
-		"23/3"  : {[]uint8{2, 3}, []uint8{3}, "23/3"  }, // Typical rules
+		"23/3":   {[]uint8{2, 3}, []uint8{3}, "23/3"},   // Typical rules
 		"233/33": {[]uint8{2, 3}, []uint8{3}, "233/33"}, // Duplicates
-		"23/"   : {[]uint8{2, 3}, []uint8{ }, "23/"   }, // No dead rules
-		"/3"    : {[]uint8{    }, []uint8{3}, "/3"    }, // No alive rules
-		"/"     : {[]uint8{    }, []uint8{ }, "/"     }, // No rules
-		" 1 / 1": {[]uint8{1   }, []uint8{1}, " 1 / 1"}, // Spaces
+		"23/":    {[]uint8{2, 3}, []uint8{}, "23/"},     // No dead rules
+		"/3":     {[]uint8{}, []uint8{3}, "/3"},         // No alive rules
+		"/":      {[]uint8{}, []uint8{}, "/"},           // No rules
+		" 1 / 1": {[]uint8{1}, []uint8{1}, " 1 / 1"},    // Spaces
 	}
 
 	for gc, out := range goodCases {
@@ -28,7 +28,7 @@ func TestNewRules(t *testing.T) {
 		}
 
 		badContent := false
-		
+
 		if len(r.Live) != len(out.Live) || len(r.Die) != len(out.Die) {
 			badContent = true
 		}

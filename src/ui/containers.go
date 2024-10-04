@@ -37,8 +37,8 @@ func createPanel(uit *theme.UITheme) *widget.Container {
 					widget.Insets{
 						Left:   10,
 						Right:  10,
-						Top:     5,
-						Bottom:  5,
+						Top:    5,
+						Bottom: 5,
 					},
 				),
 				widget.GridLayoutOpts.Columns(4),

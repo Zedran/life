@@ -10,7 +10,7 @@ type Controller struct {
 	lmbDownOn *widget.Widget
 
 	// Current rules read from the TextInput
-	rules  string
+	rules string
 
 	// Signal passed since last Controller.Emit call
 	signal UISignal
@@ -31,7 +31,7 @@ func (c *Controller) Emit() *UIResponse {
 	defer c.clearSignal()
 
 	return &UIResponse{
-		Rules : c.rules,
+		Rules:  c.rules,
 		Signal: c.signal,
 	}
 }
@@ -66,7 +66,7 @@ func (c *Controller) SetSignal(s UISignal) {
 func NewController(rules string) *Controller {
 	return &Controller{
 		lmbDownOn: nil,
-		rules : rules,
-		signal: NONE,
+		rules:     rules,
+		signal:    NONE,
 	}
 }

@@ -13,23 +13,23 @@ const DEFAULT_RULES = "23/3"
 var errInvalidRules = errors.New("invalid rules")
 
 /*
-   Rules of the game. They specify a number of neighbours required 
-   for the cell to live or die on transition to next generation.
+Rules of the game. They specify a number of neighbours required
+for the cell to live or die on transition to next generation.
 */
 type Rules struct {
 	// How many neighbours ensure survival of the cell
 	Live []uint8
 
 	// How many neighbours are required for the cell to die
-	Die  []uint8
+	Die []uint8
 
 	// Original string from which rules were created
-	Str  string
+	Str string
 }
 
 /*
-   Creates new Rules struct. Error returned means that specified string
-   is not formatted correctly, i.e. <live>/<die>. '/' must always be present.
+Creates new Rules struct. Error returned means that specified string
+is not formatted correctly, i.e. <live>/<die>. '/' must always be present.
 */
 func NewRules(ruleString string) (*Rules, error) {
 	const RULE_SEP string = "/"
@@ -61,8 +61,8 @@ func NewRules(ruleString string) (*Rules, error) {
 }
 
 /*
-   Makes an in depth validation of rules substring (either 'live' or 'die' part)
-   and returns a slice with number of neighbours required to trigger the event.
+Makes an in depth validation of rules substring (either 'live' or 'die' part)
+and returns a slice with number of neighbours required to trigger the event.
 */
 func parseRuleSubstring(sub string) ([]uint8, error) {
 	s := make([]uint8, 0)

@@ -6,40 +6,40 @@ import (
 )
 
 /*
-   Size of the cell map border that is not checked during World.Update.
-   Skipping at least one row and column prevents the out of bounds
-   access to the slice, so there is no need to check for it.
+Size of the cell map border that is not checked during World.Update.
+Skipping at least one row and column prevents the out of bounds
+access to the slice, so there is no need to check for it.
 */
 const PADDING int = 1
 
 /* Represents the world of the game - a square grid of cells. */
 type World struct {
 	// BufferPool for the State array
-	bp         *BufferPool
+	bp *BufferPool
 
 	// The number of cells in one row / column
-	Size       int
+	Size int
 
 	// Current generation of the world
 	Generation uint64
 
 	// State of the cells, points to World.bp.state
-	Cells      []State
+	Cells []State
 
 	// Game rules currently in effect
-	Rules      *Rules
+	Rules *Rules
 
 	// WaitGroup for World.Update method
-	wg         *sync.WaitGroup
+	wg *sync.WaitGroup
 
 	// Indicates whether the World is currently updating (World.wg waits)
-	Working    bool
+	Working bool
 }
 
 /*
-	Randomly fills the world with life. 
-	The accepted values of density parameter fall in range <1; 9>. 
-	The lower the density, the more scarce life becomes.
+Randomly fills the world with life.
+The accepted values of density parameter fall in range <1; 9>.
+The lower the density, the more scarce life becomes.
 */
 func (w *World) RandomState(density int) {
 	const DENSITY_MAX int = 10
@@ -53,7 +53,7 @@ func (w *World) RandomState(density int) {
 	w.Reset()
 
 	for i := range w.Cells {
-		if rand.Intn(DENSITY_MAX - density) == 0 {
+		if rand.Intn(DENSITY_MAX-density) == 0 {
 			w.Cells[i] = State(rand.Intn(2))
 		}
 	}
@@ -76,25 +76,25 @@ func (w *World) Update() {
 
 	buffer := w.bp.GetCurrentBuffer()
 
-	w.wg.Add(1 + w.Size - PADDING * 2)
+	w.wg.Add(1 + w.Size - PADDING*2)
 
 	go w.bp.ClearSpareBuffer(w.wg)
 
-	for y := w.Size * PADDING; y < len(w.Cells) - w.Size * PADDING; y += w.Size  {
-		
+	for y := w.Size * PADDING; y < len(w.Cells)-w.Size*PADDING; y += w.Size {
+
 		go func(rowStart int) {
 
-			for i := rowStart + PADDING; i < rowStart + w.Size - PADDING; i++ {
+			for i := rowStart + PADDING; i < rowStart+w.Size-PADDING; i++ {
 				// Neighbour count
-				nc := 
-					w.Cells[i - 1 - w.Size] + 
-					w.Cells[i     - w.Size] + 
-					w.Cells[i + 1 - w.Size] + 
-					w.Cells[i - 1         ] + 
-					w.Cells[i + 1         ] + 
-					w.Cells[i - 1 + w.Size] + 
-					w.Cells[i     + w.Size] + 
-					w.Cells[i + 1 + w.Size]
+				nc :=
+					w.Cells[i-1-w.Size] +
+						w.Cells[i-w.Size] +
+						w.Cells[i+1-w.Size] +
+						w.Cells[i-1] +
+						w.Cells[i+1] +
+						w.Cells[i-1+w.Size] +
+						w.Cells[i+w.Size] +
+						w.Cells[i+1+w.Size]
 
 				switch w.Cells[i] {
 				case ALIVE:
@@ -121,7 +121,7 @@ func (w *World) Update() {
 	w.bp.NextState()
 
 	w.Cells = w.bp.GetCurrentState()
-	
+
 	w.Working = false
 }
 
@@ -129,7 +129,7 @@ func (w *World) Update() {
 func (w *World) UpdateBy(stop *chan bool, n int) {
 	for i := 0; i < n; i++ {
 		select {
-		case <- *stop:
+		case <-*stop:
 			return
 		default:
 			w.Update()
@@ -139,17 +139,17 @@ func (w *World) UpdateBy(stop *chan bool, n int) {
 
 /* Creates new world of specified size. */
 func Genesis(worldSize int) *World {
-	cells := make([]State, worldSize * worldSize, worldSize * worldSize)
+	cells := make([]State, worldSize*worldSize, worldSize*worldSize)
 
 	rules, _ := NewRules(DEFAULT_RULES)
 
 	return &World{
-		bp        : NewBufferPool(len(cells)),
+		bp:         NewBufferPool(len(cells)),
 		Generation: 0,
-		Size      : worldSize,
-		Cells     : cells,
-		Rules     : rules,
-		wg        : &sync.WaitGroup{},
-		Working   : false,
+		Size:       worldSize,
+		Cells:      cells,
+		Rules:      rules,
+		wg:         &sync.WaitGroup{},
+		Working:    false,
 	}
 }

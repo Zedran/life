@@ -9,9 +9,9 @@ import (
 func TestBufferPoolNextState(t *testing.T) {
 	bp := NewBufferPool(16)
 
-	pState  := fmt.Sprintf("%p", bp.GetCurrentState() )
+	pState := fmt.Sprintf("%p", bp.GetCurrentState())
 	pBuffer := fmt.Sprintf("%p", bp.GetCurrentBuffer())
-	pSpare  := fmt.Sprintf("%p", bp.GetSpareBuffer()  )
+	pSpare := fmt.Sprintf("%p", bp.GetSpareBuffer())
 
 	bp.NextState()
 

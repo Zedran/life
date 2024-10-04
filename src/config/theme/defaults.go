@@ -2,9 +2,9 @@ package theme
 
 var (
 	defaultButtonTheme = jsonButtonTheme{
-		Text   : "#dff4ffff",
-		Idle   : "#006e00ff",
-		Hover  : "#00aa00ff",
+		Text:    "#dff4ffff",
+		Idle:    "#006e00ff",
+		Hover:   "#00aa00ff",
 		Pressed: "#005000ff",
 	}
 
@@ -13,10 +13,10 @@ var (
 	}
 
 	defaultMapTheme = jsonMapTheme{
-		Border    : true,
+		Border:     true,
 		Background: "#5f4d32ff",
-		CellAlive : "#000000ff",
-		CellDead  : "#fff8f2ff",
+		CellAlive:  "#000000ff",
+		CellDead:   "#fff8f2ff",
 	}
 
 	defaultPanelTheme = jsonPanelTheme{
@@ -24,10 +24,10 @@ var (
 	}
 
 	defaultTextInputTheme = jsonTextInputTheme{
-		Text         : "#646464ff",
-		Idle         : "#ffffffff",
-		Disabled     : "#c8c8c8ff",
-		Caret        : "#ffffffff",
+		Text:          "#646464ff",
+		Idle:          "#ffffffff",
+		Disabled:      "#c8c8c8ff",
+		Caret:         "#ffffffff",
 		DisabledCaret: "#c8c8c8ff",
 	}
 )

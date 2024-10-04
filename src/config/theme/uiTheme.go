@@ -4,31 +4,31 @@ import "image/color"
 
 /* User Interface theme. */
 type UITheme struct {
-	InfoPanel   *PanelTheme
-	CtrlPanel   *PanelTheme
+	InfoPanel *PanelTheme
+	CtrlPanel *PanelTheme
 
-	Generation  *LabelTheme
-	Speed       *LabelTheme
-	Zoom        *LabelTheme
+	Generation *LabelTheme
+	Speed      *LabelTheme
+	Zoom       *LabelTheme
 
-	PlayToggle  *ButtonTheme
-	SlowDown    *ButtonTheme
-	SpeedUp     *ButtonTheme
+	PlayToggle *ButtonTheme
+	SlowDown   *ButtonTheme
+	SpeedUp    *ButtonTheme
 
 	ResetState  *ButtonTheme
 	RandomState *ButtonTheme
 
-	FF_I        *ButtonTheme
-	FF_X        *ButtonTheme
-	FF_L        *ButtonTheme
-	FF_C        *ButtonTheme
-	FF_M        *ButtonTheme
+	FF_I *ButtonTheme
+	FF_X *ButtonTheme
+	FF_L *ButtonTheme
+	FF_C *ButtonTheme
+	FF_M *ButtonTheme
 
-	Rules       *TextInputTheme
+	Rules *TextInputTheme
 }
 
 type ButtonTheme struct {
-	Text    *color.NRGBA
+	Text *color.NRGBA
 
 	Idle    *color.NRGBA
 	Hover   *color.NRGBA

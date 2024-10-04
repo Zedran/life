@@ -11,10 +11,12 @@ import (
 var errMalformedColorCode = errors.New("malformed color code")
 
 /*
-	Converts a color code to color.RGBA struct. Accepts the following code formats: 
-		#0a0b0c   - RGB
-		#0a0b0cff - RGBA
-	Ignores case. Hash prefix is optional.
+Converts a color code to color.RGBA struct. Accepts the following code formats:
+
+	#0a0b0c   - RGB
+	#0a0b0cff - RGBA
+
+Ignores case. Hash prefix is optional.
 */
 func decodeColor(code string) (*color.RGBA, error) {
 	code = strings.Replace(code, "#", "", -1)
@@ -36,6 +38,6 @@ func decodeColor(code string) (*color.RGBA, error) {
 /* Converts color.RGBA to color.NRGBA. */
 func rgbaToNRGBA(c *color.RGBA) *color.NRGBA {
 	nrgba := (color.NRGBA)(*c)
-	
+
 	return &nrgba
 }

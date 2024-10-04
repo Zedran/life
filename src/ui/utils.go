@@ -13,7 +13,7 @@ func loadFont(size float64) (font.Face, error) {
 		return nil, err
 	}
 
-	return truetype.NewFace(ttf, 
+	return truetype.NewFace(ttf,
 		&truetype.Options{
 			Size:    size,
 			DPI:     72,
@@ -28,7 +28,7 @@ func loadMonoFont(size float64) (font.Face, error) {
 		return nil, err
 	}
 
-	return truetype.NewFace(ttf, 
+	return truetype.NewFace(ttf,
 		&truetype.Options{
 			Size:    size,
 			DPI:     72,

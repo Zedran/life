@@ -12,31 +12,31 @@ import (
 
 const (
 	// Top of the config file path
-	CONFIG_DIR         string  = "config"
+	CONFIG_DIR string = "config"
 
 	// Languages directory
-	LANG_DIR           string  = CONFIG_DIR + "/languages"
+	LANG_DIR string = CONFIG_DIR + "/languages"
 
 	// Theme directory
-	THEME_DIR          string  = CONFIG_DIR + "/themes"
+	THEME_DIR string = CONFIG_DIR + "/themes"
 
 	// Config file
-	CONFIG_PATH        string  = CONFIG_DIR + "/config.json"
+	CONFIG_PATH string = CONFIG_DIR + "/config.json"
 
 	// Default language file
-	DEFAULT_LANG_PATH  string  = LANG_DIR + "/en.json"
+	DEFAULT_LANG_PATH string = LANG_DIR + "/en.json"
 
 	// Default theme file
-	DEFAULT_THEME_PATH string  = THEME_DIR + "/default.json" 
+	DEFAULT_THEME_PATH string = THEME_DIR + "/default.json"
 
 	// Default minimum zoom value
-	DEFAULT_ZOOM_MIN   float32 =  4
+	DEFAULT_ZOOM_MIN float32 = 4
 
 	// Default maximum zoom value
-	DEFAULT_ZOOM_MAX   float32 = 20
+	DEFAULT_ZOOM_MAX float32 = 20
 
 	// Lowest zoom value allowed
-	ZOOM_MIN_LIMIT     float32 =  1
+	ZOOM_MIN_LIMIT float32 = 1
 )
 
 /* Configuration of the game. */
@@ -45,20 +45,20 @@ type Config struct {
 	WorldSize int
 
 	// Minimum zoom value for the map, limited to ZOOM_MIN_LIMIT
-	ZoomMin   float32
+	ZoomMin float32
 
-	// Maximum zoom value for the map, unlimited in code, but the cap is always 
+	// Maximum zoom value for the map, unlimited in code, but the cap is always
 	// the greatest common factor of Window.W and Window.H, regardless of the higher setting
-	ZoomMax   float32
+	ZoomMax float32
 
 	// Language of the game
-	Language  *lang.Language
+	Language *lang.Language
 
 	// Color theme of the game
-	Theme     *theme.Theme
+	Theme *theme.Theme
 
 	// Window configuration
-	Window    *Window
+	Window *Window
 }
 
 /* Builds the config directory tree. */
@@ -69,7 +69,7 @@ func createDirTree(root string) error {
 		return err
 	}
 
-	if err := os.Mkdir(filepath.Join(root, THEME_DIR),   perm); err != nil {
+	if err := os.Mkdir(filepath.Join(root, THEME_DIR), perm); err != nil {
 		return err
 	}
 
@@ -94,7 +94,7 @@ func LoadConfig() *Config {
 		return defaultConfig.ToConfig(root)
 	}
 
-	var	jc jsonConfig
+	var jc jsonConfig
 
 	stream, err := os.ReadFile(filepath.Join(root, CONFIG_PATH))
 	if err != nil {
@@ -137,8 +137,8 @@ func WriteDefaults() error {
 	}
 
 	resources := map[string]func(string) error{
-		filepath.Join(root, CONFIG_PATH)       : SaveDefault,
-		filepath.Join(root, DEFAULT_LANG_PATH) : lang.SaveDefault,
+		filepath.Join(root, CONFIG_PATH):        SaveDefault,
+		filepath.Join(root, DEFAULT_LANG_PATH):  lang.SaveDefault,
 		filepath.Join(root, DEFAULT_THEME_PATH): theme.SaveDefault,
 	}
 

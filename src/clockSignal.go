@@ -5,7 +5,7 @@ type ClockSignal uint8
 
 const (
 	// Do nothing
-	WAIT    ClockSignal = iota
+	WAIT ClockSignal = iota
 
 	// Trigger an event now
 	TRIGGER

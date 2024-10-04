@@ -7,7 +7,7 @@ func TestVerifyCfgFileExt(t *testing.T) {
 	const ext = ".json"
 
 	cases := map[string]string{
-		"file"     : "file.json",
+		"file":      "file.json",
 		"file.json": "file.json",
 	}
 

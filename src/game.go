@@ -15,7 +15,7 @@ import (
 /* Represents the general structure of the game. */
 type Game struct {
 	// Game config
-	Config    *config.Config
+	Config *config.Config
 
 	// Drag event handles panning of the Game.Map
 	DragEvent *DragEvent
@@ -24,21 +24,21 @@ type Game struct {
 	DrawEvent *DrawEvent
 
 	// Generations clock manages the speed of transition through generations
-	GenClock  *Clock
+	GenClock *Clock
 
-	Map       *Map
+	Map *Map
 
 	// A pointer to user interface of the game
-	UI        *ui.UI
+	UI *ui.UI
 
 	// Game logic
-	World     *world.World
+	World *world.World
 
 	// Sentinel channel used for stopping long tasks
-	Sentinel  chan bool
+	Sentinel chan bool
 
 	// Indicates whether the game is currently running
-	State     GameState
+	State GameState
 }
 
 /* Returns true if cursor is within bounds of the main window. */
@@ -152,7 +152,7 @@ func (g *Game) Update() error {
 		}
 
 		if inpututil.IsMouseButtonJustPressed(ebiten.MouseButtonLeft) {
-			g.DrawEvent = NewDrawEvent(g.Map)	
+			g.DrawEvent = NewDrawEvent(g.Map)
 		}
 	}
 
@@ -231,22 +231,22 @@ func NewGame() *Game {
 	ebiten.SetScreenClearedEveryFrame(false)
 
 	w := world.Genesis(cfg.WorldSize)
-	
+
 	ui, err := ui.NewUI(cfg.Theme.UITheme, cfg.Language, world.DEFAULT_RULES)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	g := Game{
-		Config   : cfg,
+		Config:    cfg,
 		DragEvent: nil,
 		DrawEvent: nil,
-		GenClock : NewClock(),
-		Map      : NewMap(cfg, w),
-		UI       : ui,
-		World    : w,
-		State    : PAUSE,
-		Sentinel : make(chan bool),
+		GenClock:  NewClock(),
+		Map:       NewMap(cfg, w),
+		UI:        ui,
+		World:     w,
+		State:     PAUSE,
+		Sentinel:  make(chan bool),
 	}
 
 	g.UI.UpdateSpeedValue(g.GenClock.GetEventsPerSec())

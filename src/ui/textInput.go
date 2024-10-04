@@ -8,8 +8,8 @@ import (
 )
 
 /*
-	Returns new widget.TextInput. Accepts font, placeholder (text displayed when empty), text to display,
-	Controller and UISignal associated with the TextInput.
+Returns new widget.TextInput. Accepts font, placeholder (text displayed when empty), text to display,
+Controller and UISignal associated with the TextInput.
 */
 func NewTextInput(tit *theme.TextInputTheme, font *font.Face, placeholder, text string, c *Controller, s UISignal) *widget.TextInput {
 	ti := widget.NewTextInput(
@@ -36,7 +36,7 @@ func NewTextInput(tit *theme.TextInputTheme, font *font.Face, placeholder, text 
 			widget.WidgetOpts.LayoutData(
 				widget.GridLayoutData{
 					HorizontalPosition: widget.GridLayoutPositionCenter,
-					VerticalPosition: widget.GridLayoutPositionStart,
+					VerticalPosition:   widget.GridLayoutPositionStart,
 				},
 			),
 			widget.WidgetOpts.MinSize(140, 10),
@@ -50,7 +50,7 @@ func NewTextInput(tit *theme.TextInputTheme, font *font.Face, placeholder, text 
 
 func loadTextInputImage(tit *theme.TextInputTheme) *widget.TextInputImage {
 	return &widget.TextInputImage{
-		Idle:     image.NewNineSliceColor(tit.Text),
+		Idle: image.NewNineSliceColor(tit.Text),
 	}
 }
 
