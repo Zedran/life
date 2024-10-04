@@ -78,9 +78,6 @@ func (jbt *jsonButtonTheme) ToTheme() *ButtonTheme {
 		}
 
 		vals[i] = rgbaToNRGBA(c)
-		if err != nil {
-			return defaultButtonTheme.ToTheme()
-		}
 	}
 
 	return &ButtonTheme{
