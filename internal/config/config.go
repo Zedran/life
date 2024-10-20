@@ -2,6 +2,8 @@ package config
 
 import (
 	"encoding/json"
+	"errors"
+	"fmt"
 	"io/fs"
 	"os"
 	"path/filepath"
@@ -12,7 +14,7 @@ import (
 
 const (
 	// Top of the config file path
-	CONFIG_DIR string = "config"
+	CONFIG_DIR string = "github.com/Zedran/life"
 
 	// Languages directory
 	LANG_DIR string = CONFIG_DIR + "/languages"
@@ -88,24 +90,26 @@ func dirTreeExists(root string) bool {
 }
 
 /* Loads the config from file. If the file does not exist, returns default config. */
-func LoadConfig() *Config {
-	root, err := GetRootDir()
+func LoadConfig() (*Config, error) {
+	root, err := os.UserConfigDir()
 	if err != nil {
-		return defaultConfig.ToConfig(root)
+		return nil, fmt.Errorf("failed to determine user config directory: %w", err)
+	}
+
+	dir := filepath.Join(root, CONFIG_DIR)
+
+	stream, err := os.ReadFile(filepath.Join(root, CONFIG_PATH))
+	if err != nil {
+		return defaultConfig.ToConfig(dir), nil
 	}
 
 	var jc jsonConfig
 
-	stream, err := os.ReadFile(filepath.Join(root, CONFIG_PATH))
-	if err != nil {
-		return defaultConfig.ToConfig(root)
-	}
-
 	if err = json.Unmarshal(stream, &jc); err != nil {
-		return defaultConfig.ToConfig(root)
+		return defaultConfig.ToConfig(dir), nil
 	}
 
-	return jc.ToConfig(root)
+	return jc.ToConfig(root), nil
 }
 
 /* Saves the unexported default config data. */
@@ -125,13 +129,13 @@ func SaveConfig(jc *jsonConfig, path string) error {
 
 /* Builds the config directory tree and writes all the default files into it. Files that already exist are not overwritten. */
 func WriteDefaults() error {
-	root, err := GetRootDir()
+	root, err := os.UserConfigDir()
 	if err != nil {
 		return err
 	}
 
-	if !dirTreeExists(root) {
-		if err := createDirTree(root); err != nil {
+	if !dirTreeExists(filepath.Join(root, CONFIG_DIR)) {
+		if err := createDirTree(root); err != nil && !errors.Is(err, os.ErrExist) {
 			return err
 		}
 	}

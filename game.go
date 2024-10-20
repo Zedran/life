@@ -220,7 +220,10 @@ func (g *Game) UpdateDrawEvent() {
 
 /* Creates new game. */
 func NewGame() *Game {
-	cfg := config.LoadConfig()
+	cfg, err := config.LoadConfig()
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	if err := config.WriteDefaults(); err != nil {
 		log.Fatal(err)

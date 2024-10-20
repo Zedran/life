@@ -1,9 +1,6 @@
 package config
 
-import (
-	"os"
-	"path/filepath"
-)
+import "path/filepath"
 
 /*
 Returns the default world size. The default size is twice the amount of cells that fits into greater window dimension
@@ -20,16 +17,6 @@ func GetDefaultWorldSize(w *Window, zoomMin float32) int {
 	}
 
 	return int(2 * dim / zoomMin)
-}
-
-/* Returns the root directory in which the executable is located. */
-func GetRootDir() (string, error) {
-	exePath, err := os.Executable()
-	if err != nil {
-		return "", err
-	}
-
-	return filepath.Dir(exePath), nil
 }
 
 /* Verifies that the path ends with '.json' extension and appends it if not found. */

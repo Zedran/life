@@ -10,13 +10,15 @@ The application needs to be compiled from source code. This process requires [Go
 
 ## Configuration
 
+The location of the main config directory depends on the operating system. It is determined by Go's [os.UserConfigDir function](https://pkg.go.dev/os#UserConfigDir). For Linux, it is typically located within `$HOME/.config/`, for Windows - `%APPDATA%/`.
+
 ### Config directory structure
 
-| Directory             | Function                                                       |
-|:----------------------|:---------------------------------------------------------------|
-| `./config/`           | Root config directory. Contains main config file.              |
-| `./config/themes/`    | Themes directory. Contains theme files, one file per theme.    |
-| `./config/languages/` | Language directory. Contains language files, one per language. |
+| Directory                | Function                                                       |
+|:-------------------------|:---------------------------------------------------------------|
+| `github.com/Zedran/life` | Main config directory path. Contains the main config file.     |
+| `<root>/themes/`         | Themes directory. Contains theme files, one file per theme.    |
+| `<root>/languages/`      | Language directory. Contains language files, one per language. |
 
 ### Naming convention for config files
 
